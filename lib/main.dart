@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nir_app/ar_screen/ar_screen_widget.dart';
 import 'package:nir_app/start_screen/start_screen_widget.dart';
 import 'package:nir_app/welcome_screen/welcome_screen_widget.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Jost',
       ),
       title: 'Lorem',
-      home: WelcomeScreenWidget(),
+      home: MyAppp(),
     );
   }
 }
