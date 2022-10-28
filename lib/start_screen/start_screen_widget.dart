@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 
-class StartScreenWidget extends StatelessWidget {
+class StartScreenWidget extends StatefulWidget {
   const StartScreenWidget({Key? key}) : super(key: key);
+
+  @override
+  State<StartScreenWidget> createState() => _StartScreenWidgetState();
+}
+
+class _StartScreenWidgetState extends State<StartScreenWidget> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed( const Duration(seconds: 3), (){
+      Navigator.pushReplacementNamed(context, '/welcome');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
