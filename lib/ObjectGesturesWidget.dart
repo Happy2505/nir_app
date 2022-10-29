@@ -72,7 +72,7 @@ class _ObjectGesturesWidgetState extends State<ObjectGesturesWidget> {
       showFeaturePoints: false,
       showPlanes: true,
       customPlaneTexturePath: "Images/triangle.png",
-      showWorldOrigin: true,
+      // showWorldOrigin: true,
       handlePans: true,
       handleRotation: true,
     );
@@ -92,7 +92,7 @@ class _ObjectGesturesWidgetState extends State<ObjectGesturesWidget> {
       this.arObjectManager.removeNode(node);
     });*/
     anchors.forEach((anchor) {
-      this.arAnchorManager.removeAnchor(anchor);
+      arAnchorManager.removeAnchor(anchor);
     });
     anchors = [];
   }
@@ -104,31 +104,30 @@ class _ObjectGesturesWidgetState extends State<ObjectGesturesWidget> {
     if (singleHitTestResult != null) {
       var newAnchor =
       ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
-      bool? didAddAnchor = await this.arAnchorManager.addAnchor(newAnchor);
+      bool? didAddAnchor = await arAnchorManager.addAnchor(newAnchor);
       if(didAddAnchor != null)
-        {
-          if (didAddAnchor) {
-            this.anchors.add(newAnchor);
-            // Add note to anchor
-            var newNode = ARNode(
-                type: NodeType.webGLB,
-                uri:
-                "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
-                scale: Vector3(0.2, 0.2, 0.2),
-                position: Vector3(0.0, 0.0, 0.0),
-                rotation: Vector4(1.0, 0.0, 0.0, 0.0));
-            bool? didAddNodeToAnchor =
-            await this.arObjectManager.addNode(newNode, planeAnchor: newAnchor);
-            if(didAddNodeToAnchor != null)
-              if (didAddNodeToAnchor) {
-                this.nodes.add(newNode);
-              } else {
-                this.arSessionManager.onError("Adding Node to Anchor failed");
-              }
-          } else {
-            this.arSessionManager.onError("Adding Anchor failed");
-          }
+      {
+        if (didAddAnchor) {
+          anchors.add(newAnchor);
+          // Add note to anchor
+          var newNode = ARNode(
+              type: NodeType.webGLB,
+              uri:
+              "https://github.com/KhronosGroup/glTF-Sample-Models/blob/master/2.0/Fox/glTF-Binary/Fox.glb",
+              // "Models/Duck.glb",
+              scale: Vector3(0.1, 0.1, 0.1));
+          bool? didAddNodeToAnchor =
+          await arObjectManager.addNode(newNode, planeAnchor: newAnchor);
+          if(didAddNodeToAnchor != null)
+            if (didAddNodeToAnchor) {
+              nodes.add(newNode);
+            } else {
+              arSessionManager.onError("Adding Node to Anchor failed");
+            }
+        } else {
+          arSessionManager.onError("Adding Anchor failed");
         }
+      }
     }
   }
 
@@ -143,7 +142,7 @@ class _ObjectGesturesWidgetState extends State<ObjectGesturesWidget> {
   onPanEnded(String nodeName, Matrix4 newTransform) {
     print("Ended panning node " + nodeName);
     final pannedNode =
-    this.nodes.firstWhere((element) => element.name == nodeName);
+    nodes.firstWhere((element) => element.name == nodeName);
 
     /*
     * Uncomment the following command if you want to keep the transformations of the Flutter representations of the nodes up to date
@@ -163,7 +162,7 @@ class _ObjectGesturesWidgetState extends State<ObjectGesturesWidget> {
   onRotationEnded(String nodeName, Matrix4 newTransform) {
     print("Ended rotating node " + nodeName);
     final rotatedNode =
-    this.nodes.firstWhere((element) => element.name == nodeName);
+    nodes.firstWhere((element) => element.name == nodeName);
 
     /*
     * Uncomment the following command if you want to keep the transformations of the Flutter representations of the nodes up to date

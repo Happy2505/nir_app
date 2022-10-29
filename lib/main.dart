@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:nir_app/ObjectGesturesWidget.dart';
+import 'package:nir_app/ObjectsOnPlanesWidget.dart';
 import 'package:nir_app/start_screen/start_screen_widget.dart';
+import 'package:nir_app/test.dart';
 import 'package:nir_app/welcome_screen/welcome_screen_widget.dart';
 
 import 'catalog_furniture_screen/catalog_furniture.dart';
@@ -21,6 +24,7 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => const WelcomeScreenWidget(),
         '/catalog': (context) => const CatalogFurniture(),
         '/catalog/furnitureList': (context) => const FurnitureListWidget(),
+        '/catalog/furnitureList/arFurniture': (context) => ObjectGesturesWidget(),
       },
       theme: ThemeData(
         fontFamily: 'Jost',

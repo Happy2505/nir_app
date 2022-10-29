@@ -77,7 +77,7 @@ class FurnitureListWidget extends StatelessWidget {
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.pushNamed(
-                                              context, '/catalog');
+                                              context, '/catalog/furnitureList/arFurniture');
                                         },
                                         style: ButtonStyle(
                                             shape: MaterialStateProperty.all<

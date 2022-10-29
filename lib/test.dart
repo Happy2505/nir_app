@@ -26,9 +26,9 @@ class LocalAndWebObjectsWidget extends StatefulWidget {
 class _LocalAndWebObjectsWidgetState extends State<LocalAndWebObjectsWidget> {
   late ARSessionManager arSessionManager;
   late ARObjectManager arObjectManager;
-  //String localObjectReference;
+  late String localObjectReference;
   late ARNode localObjectNode;
-  //String webObjectReference;
+  late String webObjectReference;
   late ARNode webObjectNode;
   late ARNode fileSystemNode;
   late HttpClient httpClient;
@@ -148,10 +148,6 @@ class _LocalAndWebObjectsWidgetState extends State<LocalAndWebObjectsWidget> {
   }
 
   Future<void> onLocalObjectAtOriginButtonPressed() async {
-    if (localObjectNode != null) {
-      arObjectManager.removeNode(localObjectNode);
-      localObjectNode == null;
-    } else {
       var newNode = ARNode(
           type: NodeType.fileSystemAppFolderGLB,
           uri: "Models/Chicken_01/accent_chest.glb",
@@ -161,15 +157,10 @@ class _LocalAndWebObjectsWidgetState extends State<LocalAndWebObjectsWidget> {
       bool? didAddLocalNode = await arObjectManager.addNode(newNode);
       if(didAddLocalNode != null) {
         localObjectNode = ((didAddLocalNode) ? newNode : null)!;
-      }
     }
   }
 
   Future<void> onWebObjectAtOriginButtonPressed() async {
-    if (webObjectNode != null) {
-      arObjectManager.removeNode(webObjectNode);
-      webObjectNode == null;
-    } else {
       var newNode = ARNode(
           type: NodeType.webGLB,
           uri:
@@ -179,14 +170,9 @@ class _LocalAndWebObjectsWidgetState extends State<LocalAndWebObjectsWidget> {
       if(didAddWebNode != null) {
         webObjectNode = ((didAddWebNode) ? newNode : null)!;
       }
-    }
   }
 
   Future<void> onFileSystemObjectAtOriginButtonPressed() async {
-    if (fileSystemNode != null) {
-      arObjectManager.removeNode(fileSystemNode);
-      fileSystemNode == null;
-    } else {
       var newNode = ARNode(
           type: NodeType.fileSystemAppFolderGLB,
           uri: "LocalDuck.glb",
@@ -200,11 +186,9 @@ class _LocalAndWebObjectsWidgetState extends State<LocalAndWebObjectsWidget> {
       if(didAddFileSystemNode != null) {
         fileSystemNode = ((didAddFileSystemNode) ? newNode : null)!;
       }
-    }
   }
 
   Future<void> onLocalObjectShuffleButtonPressed() async {
-    if (localObjectNode != null) {
       var newScale = Random().nextDouble() / 3;
       var newTranslationAxis = Random().nextInt(3);
       var newTranslationAmount = Random().nextDouble() / 3;
@@ -222,11 +206,9 @@ class _LocalAndWebObjectsWidgetState extends State<LocalAndWebObjectsWidget> {
       newTransform.scale(newScale);
 
       localObjectNode.transform = newTransform;
-    }
   }
 
   Future<void> onWebObjectShuffleButtonPressed() async {
-    if (webObjectNode != null) {
       var newScale = Random().nextDouble() / 3;
       var newTranslationAxis = Random().nextInt(3);
       var newTranslationAmount = Random().nextDouble() / 3;
@@ -244,6 +226,5 @@ class _LocalAndWebObjectsWidgetState extends State<LocalAndWebObjectsWidget> {
       newTransform.scale(newScale);
 
       webObjectNode.transform = newTransform;
-    }
   }
 }
