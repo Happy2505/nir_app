@@ -11,7 +11,7 @@ class _StartScreenWidgetState extends State<StartScreenWidget> {
   @override
   void initState() {
     super.initState();
-    Future.delayed( const Duration(seconds: 3), (){
+    Future.delayed( const Duration(seconds: 1), (){
       Navigator.pushReplacementNamed(context, '/welcome');
     });
   }
