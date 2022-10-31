@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nir_app/Models/Models_data.dart';
 import 'package:nir_app/Theme/app_color.dart';
+import 'package:nir_app/ar_screen/ar_screen_widget.dart';
 
 class FurnitureListWidget extends StatelessWidget {
   const FurnitureListWidget({Key? key}) : super(key: key);
@@ -44,31 +46,33 @@ class FurnitureListWidget extends StatelessWidget {
                 GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: 8,
+                    itemCount: Models.models.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 1,
                             childAspectRatio: 2.4,
                             mainAxisSpacing: 30),
                     itemBuilder: (BuildContext context, index) {
+                      final furniture = Models.models[index];
                       return Card(
                         elevation: 0,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Image.asset('assets/furniture_img/стол 1.png'),
+                            Image.asset(furniture.img),
                             const SizedBox(width: 22),
                             Expanded(
                               flex: 1,
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text(
-                                    'Письменный стол Милан с ящиком 76.5х74.5 см ЛДСП цвет белый',
+                                   Text(
+                                    furniture.description,
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(fontSize: 16),
+                                    style: const TextStyle(fontSize: 16),
                                   ),
                                   Row(
                                     mainAxisAlignment:
@@ -76,8 +80,9 @@ class FurnitureListWidget extends StatelessWidget {
                                     children: [
                                       ElevatedButton(
                                         onPressed: () {
-                                          Navigator.pushNamed(
-                                              context, '/catalog/furnitureList/arFurniture');
+                                          Navigator.push(context, MaterialPageRoute(
+                                              builder: (_) => ARScreenidget(index: index)),
+                                          );
                                         },
                                         style: ButtonStyle(
                                             shape: MaterialStateProperty.all<

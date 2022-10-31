@@ -12,60 +12,116 @@ class Models {
   static var models = [
     Models(
         name: 'Стол',
-        description:'',
-        img:'',
+        description:'Письменный стол Милан с ящиком 76.5х74.5 см ЛДСП цвет белый',
+        img:'assets/furniture_img/стол 1.png',
         node: ARNode(
             type: NodeType.fileSystemAppFolderGLTF2,
             uri:
-            "Chicken_01/Stol.gltf",
+            "models/Stol.gltf",
             scale: Vector3(1, 1, 1),
             position: Vector3(0.0, 0.0, 0.0),
             rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
     ),
     Models(
-      name: 'Стул',
-      description:'',
-      img:'',
+      name: 'Стол',
+      description:'Письменный стол Милан с ящиком 76.5х74.5 см ЛДСП цвет белый',
+      img:'assets/furniture_img/стол 1.png',
       node: ARNode(
           type: NodeType.fileSystemAppFolderGLB,
           uri:
-          "Chicken_01/шкав1.glb",
+          "models/лампа.glb",
+          // "Chicken_01/shkav.glb",
           scale: Vector3(1, 1, 1),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
     ),
     Models(
       name: 'Стол',
-      description:'',
-      img:'',
+      description:'Письменный стол Милан с ящиком 76.5х74.5 см ЛДСП цвет белый',
+      img:'assets/furniture_img/стол 1.png',
       node: ARNode(
-          type: NodeType.fileSystemAppFolderGLTF2,
+          type: NodeType.fileSystemAppFolderGLB,
           uri:
-          "Chicken_01/Stol.gltf",
+          "models/лампа.glb",
+          // "Chicken_01/shkav.glb",
           scale: Vector3(1, 1, 1),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
     ),
     Models(
       name: 'Стол',
-      description:'',
-      img:'',
+      description:'Письменный стол Милан с ящиком 76.5х74.5 см ЛДСП цвет белый',
+      img:'assets/furniture_img/стол 1.png',
       node: ARNode(
-          type: NodeType.fileSystemAppFolderGLTF2,
+          type: NodeType.fileSystemAppFolderGLB,
           uri:
-          "Chicken_01/Stol.gltf",
+          "models/лампа.glb",
+          // "Chicken_01/shkav.glb",
           scale: Vector3(1, 1, 1),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
     ),
     Models(
       name: 'Стол',
-      description:'',
-      img:'',
+      description:'Письменный стол Милан с ящиком 76.5х74.5 см ЛДСП цвет белый',
+      img:'assets/furniture_img/стол 1.png',
       node: ARNode(
-          type: NodeType.fileSystemAppFolderGLTF2,
+          type: NodeType.fileSystemAppFolderGLB,
           uri:
-          "Chicken_01/Stol.gltf",
+          "models/лампа.glb",
+          // "Chicken_01/shkav.glb",
+          scale: Vector3(1, 1, 1),
+          position: Vector3(0.0, 0.0, 0.0),
+          rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
+    ),
+    Models(
+      name: 'Стол',
+      description:'Письменный стол Милан с ящиком 76.5х74.5 см ЛДСП цвет белый',
+      img:'assets/furniture_img/стол 1.png',
+      node: ARNode(
+          type: NodeType.fileSystemAppFolderGLB,
+          uri:
+          "models/лампа.glb",
+          // "Chicken_01/shkav.glb",
+          scale: Vector3(1, 1, 1),
+          position: Vector3(0.0, 0.0, 0.0),
+          rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
+    ),
+    Models(
+      name: 'Стол',
+      description:'Письменный стол Милан с ящиком 76.5х74.5 см ЛДСП цвет белый',
+      img:'assets/furniture_img/стол 1.png',
+      node: ARNode(
+          type: NodeType.fileSystemAppFolderGLB,
+          uri:
+          "models/лампа.glb",
+          // "Chicken_01/shkav.glb",
+          scale: Vector3(1, 1, 1),
+          position: Vector3(0.0, 0.0, 0.0),
+          rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
+    ),
+    Models(
+      name: 'Стол',
+      description:'Письменный стол Милан с ящиком 76.5х74.5 см ЛДСП цвет белый',
+      img:'assets/furniture_img/стол 1.png',
+      node: ARNode(
+          type: NodeType.fileSystemAppFolderGLB,
+          uri:
+          "models/лампа.glb",
+          // "Chicken_01/shkav.glb",
+          scale: Vector3(1, 1, 1),
+          position: Vector3(0.0, 0.0, 0.0),
+          rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
+    ),
+    Models(
+      name: 'Стол',
+      description:'Письменный стол Милан с ящиком 76.5х74.5 см ЛДСП цвет белый',
+      img:'assets/furniture_img/стол 1.png',
+      node: ARNode(
+          type: NodeType.fileSystemAppFolderGLB,
+          uri:
+          "models/лампа.glb",
+          // "Chicken_01/shkav.glb",
           scale: Vector3(1, 1, 1),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0)),

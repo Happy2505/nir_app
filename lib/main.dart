@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nir_app/ObjectGesturesWidget.dart';
-import 'package:nir_app/ObjectsOnPlanesWidget.dart';
+import 'package:nir_app/ar_screen/ar_screen_widget.dart';
+import 'package:nir_app/navigation/home_page.dart';
 import 'package:nir_app/start_screen/start_screen_widget.dart';
-import 'package:nir_app/test.dart';
 import 'package:nir_app/welcome_screen/welcome_screen_widget.dart';
 
 import 'catalog_furniture_screen/catalog_furniture.dart';
@@ -22,9 +21,10 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const StartScreenWidget(),
         '/welcome': (context) => const WelcomeScreenWidget(),
+        '/home': (context) => const HomePage(),
         '/catalog': (context) => const CatalogFurniture(),
         '/catalog/furnitureList': (context) => const FurnitureListWidget(),
-        '/catalog/furnitureList/arFurniture': (context) => ObjectGesturesWidget(),
+        // '/catalog/furnitureList/arFurniture': (context) => ARScreenidget(),
       },
       theme: ThemeData(
         fontFamily: 'Jost',
@@ -47,14 +47,6 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Future.delayed( const Duration(seconds: 3), (){
-  //     c
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

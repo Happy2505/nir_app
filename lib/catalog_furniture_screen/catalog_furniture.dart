@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:nir_app/Models/Models_data.dart';
 import 'package:nir_app/Theme/app_color.dart';
+
+import '../furniture_list_screen/furniture_list_widget.dart';
 
 class CatalogFurniture extends StatelessWidget {
   const CatalogFurniture({Key? key}) : super(key: key);
@@ -37,11 +40,13 @@ class CatalogFurniture extends StatelessWidget {
                               childAspectRatio: 1.4,
                               crossAxisSpacing: 16,
                               mainAxisSpacing: 16),
-                      itemCount: 8,
+                      itemCount: 6,
                       itemBuilder: (BuildContext context, index) {
                         return InkWell(
                           onTap: (){
-                            Navigator.pushNamed(context, '/catalog/furnitureList');
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (_) => const FurnitureListWidget()),
+                            );
                           },
                           child: Container(
                             decoration: BoxDecoration(

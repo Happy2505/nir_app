@@ -37,9 +37,6 @@ class _ObjectGesturesWidgetState extends State<ObjectGesturesWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Object Transformation Gestures'),
-        ),
         body: Container(
             child: Stack(children: [
           ARView(
@@ -53,7 +50,7 @@ class _ObjectGesturesWidgetState extends State<ObjectGesturesWidget> {
                 children: [
                   ElevatedButton(
                       onPressed: onRemoveEverything,
-                      child: Text("Remove Everything")),
+                      child: const Text("Remove Everything")),
                 ]),
           )
         ])));
@@ -71,7 +68,7 @@ class _ObjectGesturesWidgetState extends State<ObjectGesturesWidget> {
     this.arSessionManager.onInitialize(
           showFeaturePoints: false,
           showPlanes: true,
-          customPlaneTexturePath: "Images/triangle.png",
+          customPlaneTexturePath: "assets/triangle.png",
           showWorldOrigin: true,
           handlePans: true,
           handleRotation: true,

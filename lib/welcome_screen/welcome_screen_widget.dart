@@ -78,13 +78,13 @@ class WelcomeScreenWidget extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/catalog');
+                    Navigator.pushReplacementNamed(context, '/home');
                   },
                 ),
                 const SizedBox(width: 20),
                 ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/catalog');
+                      Navigator.pushNamed(context, '/home');
                     },
                     style: ButtonStyle(
                         shape:

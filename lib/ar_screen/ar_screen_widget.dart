@@ -1,157 +1,187 @@
-import 'package:ar_flutter_plugin/ar_flutter_plugin.dart';
-// import 'package:ar_flutter_plugin_example/examples/externalmodelmanagementexample.dart';
-// import 'package:ar_flutter_plugin_example/examples/objectsonplanesexample.dart';
+import 'package:ar_flutter_plugin/managers/ar_location_manager.dart';
+import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
+import 'package:ar_flutter_plugin/managers/ar_object_manager.dart';
+import 'package:ar_flutter_plugin/managers/ar_anchor_manager.dart';
+import 'package:ar_flutter_plugin/models/ar_anchor.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:ar_flutter_plugin/ar_flutter_plugin.dart';
-import 'package:nir_app/DebugOptionsWidget.dart';
-import 'package:nir_app/ObjectGesturesWidget.dart';
-import 'package:nir_app/ObjectsOnPlanesWidget.dart';
-import 'package:nir_app/ScreenshotWidget.dart';
-import 'package:nir_app/test.dart';
+import 'package:ar_flutter_plugin/datatypes/config_planedetection.dart';
+import 'package:ar_flutter_plugin/datatypes/hittest_result_types.dart';
+import 'package:ar_flutter_plugin/models/ar_node.dart';
+import 'package:ar_flutter_plugin/models/ar_hittest_result.dart';
+import 'package:flutter/services.dart';
+import 'package:nir_app/Models/Models_data.dart';
+import 'package:vector_math/vector_math_64.dart';
 
-// import 'package:ar_flutter_plugin_example/examples/cloudanchorexample.dart';
-// import 'package:ar_flutter_plugin_example/examples/localandwebobjectsexample.dart';
-// import 'package:ar_flutter_plugin_example/examples/debugoptionsexample.dart';
-//
-// import 'examples/objectgesturesexample.dart';
-// import 'examples/screenshotexample.dart';
+class ARScreenidget extends StatefulWidget {
+  int index;
 
+  ARScreenidget({Key? key, required this.index}) : super(key: key);
 
-class MyAppp extends StatefulWidget {
   @override
-  _MyApppState createState() => _MyApppState();
+  _ARScreenidgetState createState() => _ARScreenidgetState();
 }
 
-class _MyApppState extends State<MyAppp> {
-  String _platformVersion = 'Unknown';
-  static const String _title = 'AR Plugin Demo';
+class _ARScreenidgetState extends State<ARScreenidget> {
+  late ARSessionManager arSessionManager;
+  late ARObjectManager arObjectManager;
+  late ARAnchorManager arAnchorManager;
+
+  List<ARNode> nodes = [];
+  List<ARAnchor> anchors = [];
+
 
   @override
-  void initState() {
-    super.initState();
-    initPlatformState();
+  void dispose() {
+    super.dispose();
+    arSessionManager.dispose();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await ArFlutterPlugin.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Container(
+            child: Stack(children: [
+              ARView(
+                onARViewCreated: onARViewCreated,
+                planeDetectionConfig: PlaneDetectionConfig.horizontalAndVertical,
+              ),
+              Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                          onPressed: onRemoveEverything,
+                          child: const Text("Remove Everything")),
+                    ]),
+              )
+            ])));
+  }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
+  void onARViewCreated(
+      ARSessionManager arSessionManager,
+      ARObjectManager arObjectManager,
+      ARAnchorManager arAnchorManager,
+      ARLocationManager arLocationManager) {
+    this.arSessionManager = arSessionManager;
+    this.arObjectManager = arObjectManager;
+    this.arAnchorManager = arAnchorManager;
 
-    setState(() {
-      _platformVersion = platformVersion;
+    this.arSessionManager.onInitialize(
+      showFeaturePoints: false,
+      showPlanes: true,
+      customPlaneTexturePath: "assets/triangle.png",
+      showWorldOrigin: true,
+      handlePans: true,
+      handleRotation: true,
+    );
+    this.arObjectManager.onInitialize();
+
+    this.arSessionManager.onPlaneOrPointTap = onPlaneOrPointTapped;
+    this.arObjectManager.onPanStart = onPanStarted;
+    this.arObjectManager.onPanChange = onPanChanged;
+    this.arObjectManager.onPanEnd = onPanEnded;
+    this.arObjectManager.onRotationStart = onRotationStarted;
+    this.arObjectManager.onRotationChange = onRotationChanged;
+    this.arObjectManager.onRotationEnd = onRotationEnded;
+  }
+
+  Future<void> onRemoveEverything() async {
+    /*nodes.forEach((node) {
+      this.arObjectManager.removeNode(node);
+    });*/
+    anchors.forEach((anchor) {
+      this.arAnchorManager.removeAnchor(anchor);
     });
+    anchors = [];
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(_title),
-        ),
-        body: Column(children: [
-          Text('Running on: $_platformVersion\n'),
-          Expanded(
-            child: ExampleList(),
-          ),
-        ]),
-      ),
-    );
+  Future<void> onPlaneOrPointTapped(
+      List<ARHitTestResult> hitTestResults) async {
+    var singleHitTestResult = hitTestResults.firstWhere(
+            (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
+    if (singleHitTestResult != null) {
+      var newAnchor =
+      ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
+      bool? didAddAnchor = await this.arAnchorManager.addAnchor(newAnchor);
+      if (didAddAnchor!) {
+        this.anchors.add(newAnchor);
+        var node = Models.models[1];
+        var newNode = node.node;
+        bool? didAddNodeToAnchor =
+        await this.arObjectManager.addNode(newNode, planeAnchor: newAnchor);
+        if (didAddNodeToAnchor!) {
+          this.nodes.add(newNode);
+        } else {
+          this.arSessionManager.onError("Adding Node to Anchor failed");
+        }
+      } else {
+        this.arSessionManager.onError("Adding Anchor failed");
+      }
+    }
   }
-}
 
-class ExampleList extends StatelessWidget {
-  ExampleList({Key? key}) : super(key: key);
+  onPanStarted(String nodeName) {
+    print("Started panning node " + nodeName);
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    final examples = [
-      Example(
-          'Debug Options',
-          'Visualize feature points, planes and world coordinate system',
-              () => Navigator.push(context,
-              MaterialPageRoute(builder: (context) => DebugOptionsWidget()))),
-      Example(
-          'Local & Online Objects',
-          'Place 3D objects from Flutter assets and the web into the scene',
-              () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => LocalAndWebObjectsWidget()))),
-      Example(
-          'Anchors & Objects on Planes',
-          'Place 3D objects on detected planes using anchors',
-              () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ObjectsOnPlanesWidget()))),
-      Example(
-          'Object Transformation Gestures',
-          'Rotate and Pan Objects',
-              () => Navigator.push(context,
-              MaterialPageRoute(builder: (context) => ObjectGesturesWidget()))),
-      Example(
-          'Screenshots',
-          'Place 3D objects on planes and take screenshots',
-              () => Navigator.push(context,
-              MaterialPageRoute(builder: (context) => ScreenshotWidget()))),
-      // Example(
-      //     'Cloud Anchors',
-      //     'Place and retrieve 3D objects using the Google Cloud Anchor API',
-      //         () => Navigator.push(context,
-      //         MaterialPageRoute(builder: (context) => CloudAnchorWidget()))),
-      // Example(
-      //     'External Model Management',
-      //     'Similar to Cloud Anchors example, but uses external database to choose from available 3D models',
-      //         () => Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //             builder: (context) => ExternalModelManagementWidget())))
-    ];
-    return ListView(
-      children:
-      examples.map((example) => ExampleCard(example: example)).toList(),
-    );
+  onPanChanged(String nodeName) {
+    print("Continued panning node " + nodeName);
+  }
+
+  onPanEnded(String nodeName, Matrix4 newTransform) {
+    print("Ended panning node " + nodeName);
+    final pannedNode =
+    this.nodes.firstWhere((element) => element.name == nodeName);
+
+    /*
+    * Uncomment the following command if you want to keep the transformations of the Flutter representations of the nodes up to date
+    * (e.g. if you intend to share the nodes through the cloud)
+    */
+    //pannedNode.transform = newTransform;
+  }
+
+  onRotationStarted(String nodeName) {
+    print("Started rotating node " + nodeName);
+  }
+
+  onRotationChanged(String nodeName) {
+    print("Continued rotating node " + nodeName);
+  }
+
+  onRotationEnded(String nodeName, Matrix4 newTransform) {
+    print("Ended rotating node " + nodeName);
+    final rotatedNode =
+    this.nodes.firstWhere((element) => element.name == nodeName);
+
+    /*
+    * Uncomment the following command if you want to keep the transformations of the Flutter representations of the nodes up to date
+    * (e.g. if you intend to share the nodes through the cloud)
+    */
+    //rotatedNode.transform = newTransform;
   }
 }
 
-class ExampleCard extends StatelessWidget {
-  ExampleCard({Key? key, required this.example}) : super(key: key);
-  final Example example;
-
-  @override
-  build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        splashColor: Colors.blue.withAlpha(30),
-        onTap: () {
-          example.onTap();
-        },
-        child: ListTile(
-          title: Text(example.name),
-          subtitle: Text(example.description),
-        ),
-      ),
-    );
-  }
-}
-
-class Example {
-  const Example(this.name, this.description, this.onTap);
-  final String name;
-  final String description;
-  final Function onTap;
-}
+// void test() async{
+//   if(localObject!=null){
+//     arObjectManager.removeNode(localObject!);
+//     localObject = null;
+//   }else{
+//     var newNode = ARNode(
+//         type: NodeType.webGLB,
+//         uri:
+//         // "assets/Chicken_01/Chicken_01.gltf",
+//         "https://github.com/KhronosGroup/glTF-Sample-Models/blob/master/2.0/Duck/glTF-Binary/Duck.glb",
+//         scale: Vector3(0.1, 0.1, 0.1),
+//         position: Vector3(0.0, 0.0, 0.0),
+//         rotation: Vector4(1.0, 0.0, 0.0, 0.0));
+//     bool? didAddLocalNode =
+//     await arObjectManager.addNode(newNode);
+//     if (didAddLocalNode!) {
+//       localObject = newNode;
+//     } else {
+//       localObject = null;
+//     }
+//   }
+// }
