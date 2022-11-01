@@ -11,12 +11,14 @@ import 'package:ar_flutter_plugin/models/ar_node.dart';
 import 'package:ar_flutter_plugin/models/ar_hittest_result.dart';
 import 'package:flutter/services.dart';
 import 'package:nir_app/Models/Models_data.dart';
+import 'package:nir_app/ar_screen/ar_screen_model.dart';
 import 'package:vector_math/vector_math_64.dart';
+import 'package:provider/provider.dart';
+
 
 class ARScreenidget extends StatefulWidget {
-  int index;
 
-  ARScreenidget({Key? key, required this.index}) : super(key: key);
+  ARScreenidget({Key? key}) : super(key: key);
 
   @override
   _ARScreenidgetState createState() => _ARScreenidgetState();
@@ -44,7 +46,7 @@ class _ARScreenidgetState extends State<ARScreenidget> {
             child: Stack(children: [
               ARView(
                 onARViewCreated: onARViewCreated,
-                planeDetectionConfig: PlaneDetectionConfig.horizontalAndVertical,
+                planeDetectionConfig: PlaneDetectionConfig.horizontal,
               ),
               Align(
                 alignment: FractionalOffset.bottomCenter,
@@ -72,7 +74,6 @@ class _ARScreenidgetState extends State<ARScreenidget> {
       showFeaturePoints: false,
       showPlanes: true,
       customPlaneTexturePath: "assets/triangle.png",
-      showWorldOrigin: true,
       handlePans: true,
       handleRotation: true,
     );
@@ -99,6 +100,7 @@ class _ARScreenidgetState extends State<ARScreenidget> {
 
   Future<void> onPlaneOrPointTapped(
       List<ARHitTestResult> hitTestResults) async {
+    final model = context.read<ARScreenModel>();
     var singleHitTestResult = hitTestResults.firstWhere(
             (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
     if (singleHitTestResult != null) {
@@ -107,7 +109,7 @@ class _ARScreenidgetState extends State<ARScreenidget> {
       bool? didAddAnchor = await this.arAnchorManager.addAnchor(newAnchor);
       if (didAddAnchor!) {
         this.anchors.add(newAnchor);
-        var node = Models.models[1];
+        var node = Models.models[model.indexx];
         var newNode = node.node;
         bool? didAddNodeToAnchor =
         await this.arObjectManager.addNode(newNode, planeAnchor: newAnchor);

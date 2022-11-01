@@ -45,7 +45,7 @@ class CatalogFurniture extends StatelessWidget {
                         return InkWell(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(
-                                builder: (_) => const FurnitureListWidget()),
+                                builder: (_) => FurnitureListWidget()),
                             );
                           },
                           child: Container(

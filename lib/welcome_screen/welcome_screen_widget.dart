@@ -84,7 +84,7 @@ class WelcomeScreenWidget extends StatelessWidget {
                 const SizedBox(width: 20),
                 ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushReplacementNamed(context, '/home');
                     },
                     style: ButtonStyle(
                         shape:

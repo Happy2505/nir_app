@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => const WelcomeScreenWidget(),
         '/home': (context) => const HomePage(),
         '/catalog': (context) => const CatalogFurniture(),
-        '/catalog/furnitureList': (context) => const FurnitureListWidget(),
-        // '/catalog/furnitureList/arFurniture': (context) => ARScreenidget(),
+        '/catalog/furnitureList': (context) => FurnitureListWidget(),
+        '/catalog/furnitureList/arFurniture': (context) => ARScreenidget(),
       },
       theme: ThemeData(
         fontFamily: 'Jost',
