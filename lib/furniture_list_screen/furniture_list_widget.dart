@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nir_app/Models/Models_data.dart';
 import 'package:nir_app/Theme/app_color.dart';
-import 'package:nir_app/ar_screen/ar_screen_model.dart';
-import 'package:nir_app/ar_screen/ar_screen_widget.dart';
 import 'package:nir_app/factoryes/screen_factory.dart';
 
 class FurnitureListWidget extends StatelessWidget {

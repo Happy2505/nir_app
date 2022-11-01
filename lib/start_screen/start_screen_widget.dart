@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class StartScreenWidget extends StatefulWidget {
   const StartScreenWidget({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class _StartScreenWidgetState extends State<StartScreenWidget> {
   @override
   void initState() {
     super.initState();
-    Future.delayed( const Duration(seconds: 1), (){
+    Future.delayed( const Duration(seconds: 3), (){
       Navigator.pushReplacementNamed(context, '/welcome');
     });
   }
@@ -29,7 +30,9 @@ class _StartScreenWidgetState extends State<StartScreenWidget> {
           Center(child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/logo.png'),
+              SvgPicture.asset(
+                "assets/logo.svg",
+              ),
               const Text('Lorem',
                 style: TextStyle(
                     fontSize: 32,

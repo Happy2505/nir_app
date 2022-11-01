@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nir_app/Theme/app_color.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 
 class WelcomeScreenWidget extends StatelessWidget {
   const WelcomeScreenWidget({Key? key}) : super(key: key);
@@ -16,10 +18,12 @@ class WelcomeScreenWidget extends StatelessWidget {
             fit: BoxFit.fill,
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 41, left: 41),
+            padding: const EdgeInsets.only(top: 55, left: 41),
             child: Column(
               children: [
-                Image.asset('assets/logo.png'),
+                SvgPicture.asset(
+                  "assets/logo.svg",
+                ),
                 const Text(
                   'Lorem',
                   style: TextStyle(
