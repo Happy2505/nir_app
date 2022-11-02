@@ -11,6 +11,7 @@ import 'package:ar_flutter_plugin/models/ar_node.dart';
 import 'package:ar_flutter_plugin/models/ar_hittest_result.dart';
 import 'package:flutter/services.dart';
 import 'package:nir_app/Models/Models_data.dart';
+import 'package:nir_app/Theme/app_color.dart';
 import 'package:nir_app/ar_screen/ar_screen_model.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'package:provider/provider.dart';
@@ -54,8 +55,28 @@ class _ARScreenidgetState extends State<ARScreenidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ElevatedButton(
-                          onPressed: onRemoveEverything,
-                          child: const Text("Remove Everything")),
+                        onPressed: onRemoveEverything,
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(
+                                        3))),
+                            backgroundColor:
+                            MaterialStateProperty.all(
+                                const Color.fromARGB(
+                                    255, 240, 240, 240)),
+                            minimumSize:
+                            MaterialStateProperty.all(
+                                const Size(108, 38))),
+                        child: const Text(
+                          'Удалить',
+                          style: TextStyle(
+                              color: AppColors.mainDark,
+                              fontSize: 16),
+                        ),
+                      ),
                     ]),
               )
             ])));
@@ -73,7 +94,7 @@ class _ARScreenidgetState extends State<ARScreenidget> {
     this.arSessionManager.onInitialize(
       showFeaturePoints: false,
       showPlanes: true,
-      customPlaneTexturePath: "assets/triangle.png",
+      // customPlaneTexturePath: "assets/triangle.png",
       handlePans: true,
       handleRotation: true,
     );

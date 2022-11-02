@@ -1,30 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:nir_app/Theme/app_color.dart';
-import 'package:nir_app/welcome_screen/second_welcome_screen_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 
-class WelcomeScreenWidget extends StatefulWidget {
-  const WelcomeScreenWidget({Key? key}) : super(key: key);
+class ThirdWelcomeScreenWidget extends StatelessWidget {
+  const ThirdWelcomeScreenWidget({Key? key}) : super(key: key);
 
-  @override
-  State<WelcomeScreenWidget> createState() => _WelcomeScreenWidgetState();
-}
-
-class _WelcomeScreenWidgetState extends State<WelcomeScreenWidget> {
   @override
   Widget build(BuildContext context) {
-    int index = 0;
-    String back = 'assets/start_image1.png';
-    if(index == 0){
-      back = 'assets/start_image1.png';
-    }else if(index ==1){
-      back = 'assets/image 2.png';    }
     return Scaffold(
       body: Stack(
         children: [
-          Image.asset(back,
+          Image.asset(
+            'assets/start_image1.png',
             height: MediaQuery.of(context).size.height,
             fit: BoxFit.fill,
           ),
@@ -51,7 +40,7 @@ class _WelcomeScreenWidgetState extends State<WelcomeScreenWidget> {
             left: 41,
             child: AnimatedSmoothIndicator(
               count: 3,
-              activeIndex: index,
+              activeIndex: 2,
               effect: const WormEffect(
                 dotColor: Color.fromARGB(76, 217, 217, 217),
                 activeDotColor: Colors.white,
@@ -99,12 +88,7 @@ class _WelcomeScreenWidgetState extends State<WelcomeScreenWidget> {
                 const SizedBox(width: 20),
                 ElevatedButton(
                     onPressed: () {
-                      // setState(() {
-                      //   index= index+1;
-                      // });
-                      // if(index==2) {
-                        Navigator.pushReplacementNamed(context, '/home');
-                      // }
+                      Navigator.pushReplacementNamed(context, '/home');
                     },
                     style: ButtonStyle(
                         shape:
@@ -139,9 +123,5 @@ class _WelcomeScreenWidgetState extends State<WelcomeScreenWidget> {
         ],
       ),
     );
-  }
-
-  Widget Second(BuildContext context){
-    return Container();
   }
 }

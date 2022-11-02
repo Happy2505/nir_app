@@ -29,8 +29,8 @@ class Models {
       node: ARNode(
           type: NodeType.fileSystemAppFolderGLB,
           uri:
+          // "https://github.com/Happy2505/Models/blob/main/lampa.glb",
           "models/лампа.glb",
-          // "Chicken_01/shkav.glb",
           scale: Vector3(1, 1, 1),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
