@@ -4,7 +4,6 @@ import 'package:nir_app/welcome_screen/second_welcome_screen_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
 class WelcomeScreenWidget extends StatefulWidget {
   const WelcomeScreenWidget({Key? key}) : super(key: key);
 
@@ -13,18 +12,23 @@ class WelcomeScreenWidget extends StatefulWidget {
 }
 
 class _WelcomeScreenWidgetState extends State<WelcomeScreenWidget> {
+  int index = 0;
+  String back = 'assets/start_image1.png';
+  String text = '';
+
   @override
   Widget build(BuildContext context) {
-    int index = 0;
-    String back = 'assets/start_image1.png';
-    if(index == 0){
+    if (index == 0) {
       back = 'assets/start_image1.png';
-    }else if(index ==1){
-      back = 'assets/image 2.png';    }
+    } else if (index == 1) {
+      back = 'assets/image 2.png';
+    }
+
     return Scaffold(
       body: Stack(
         children: [
-          Image.asset(back,
+          Image.asset(
+            back,
             height: MediaQuery.of(context).size.height,
             fit: BoxFit.fill,
           ),
@@ -50,7 +54,7 @@ class _WelcomeScreenWidgetState extends State<WelcomeScreenWidget> {
             top: 395,
             left: 41,
             child: AnimatedSmoothIndicator(
-              count: 3,
+              count: 2,
               activeIndex: index,
               effect: const WormEffect(
                 dotColor: Color.fromARGB(76, 217, 217, 217),
@@ -60,24 +64,50 @@ class _WelcomeScreenWidgetState extends State<WelcomeScreenWidget> {
               ),
             ),
           ),
-          Positioned(
-            left: 40,
-            bottom: ((MediaQuery.of(context).size.height) / 2) - 120,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  'Создай свой',
-                  style: TextStyle(color: Colors.white, fontSize: 32),
-                ),
-                Text(
-                  'Уютный дом',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 40,
-                      fontWeight: FontWeight.w600),
-                ),
-              ],
+          Visibility(
+            visible: index==0,
+            child: Positioned(
+              left: 40,
+              bottom: ((MediaQuery.of(context).size.height) / 2) - 120,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    'Создай свой',
+                    style: TextStyle(color: Colors.white, fontSize: 32),
+                  ),
+                  Text(
+                    'Уютный дом',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 40,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Visibility(
+            visible: index==1,
+            child: Positioned(
+              left: 40,
+              bottom: ((MediaQuery.of(context).size.height) / 2) - 120,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    'Создай свой',
+                    style: TextStyle(color: Colors.white, fontSize: 32),
+                  ),
+                  Text(
+                    'Уютный дом',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 40,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
             ),
           ),
           Positioned(
@@ -86,11 +116,9 @@ class _WelcomeScreenWidgetState extends State<WelcomeScreenWidget> {
             child: Row(
               children: [
                 TextButton(
-                  child: const Text('Пропустить',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 26
-                    ),
+                  child: const Text(
+                    'Пропустить',
+                    style: TextStyle(color: Colors.white, fontSize: 26),
                   ),
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/home');
@@ -99,22 +127,22 @@ class _WelcomeScreenWidgetState extends State<WelcomeScreenWidget> {
                 const SizedBox(width: 20),
                 ElevatedButton(
                     onPressed: () {
-                      // setState(() {
-                      //   index= index+1;
-                      // });
-                      // if(index==2) {
+                      setState(() {
+                        index = index + 1;
+                      });
+                      if (index == 2) {
                         Navigator.pushReplacementNamed(context, '/home');
-                      // }
+                      }
                     },
                     style: ButtonStyle(
                         shape:
-                        MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(32))),
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(32))),
                         backgroundColor:
-                        MaterialStateProperty.all(Colors.white),
+                            MaterialStateProperty.all(Colors.white),
                         minimumSize:
-                        MaterialStateProperty.all(const Size(161, 68))),
+                            MaterialStateProperty.all(const Size(161, 68))),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: const [
@@ -141,7 +169,7 @@ class _WelcomeScreenWidgetState extends State<WelcomeScreenWidget> {
     );
   }
 
-  Widget Second(BuildContext context){
+  Widget Second(BuildContext context) {
     return Container();
   }
 }
