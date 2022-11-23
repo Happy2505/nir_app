@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomePage(),
         '/catalog': (context) => const CatalogFurniture(),
         '/catalog/furnitureList': (context) => FurnitureListWidget(),
-        '/catalog/furnitureList/arFurniture': (context) => ARScreenidget(),
+        '/catalog/furnitureList/arFurniture': (context) => ARScreenWidget(),
       },
       theme: ThemeData(
         fontFamily: 'Jost',

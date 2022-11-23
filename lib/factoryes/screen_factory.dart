@@ -8,7 +8,7 @@ class ScreenFactory {
   Widget ARScreen(int index) {
     return ChangeNotifierProvider(
       create: (_) => ARScreenModel(index),
-      child: ARScreenidget(),
+      child: ARScreenWidget(),
     );
   }
 }

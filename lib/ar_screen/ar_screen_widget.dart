@@ -1,3 +1,4 @@
+
 import 'package:ar_flutter_plugin/managers/ar_location_manager.dart';
 import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
 import 'package:ar_flutter_plugin/managers/ar_object_manager.dart';
@@ -13,25 +14,28 @@ import 'package:flutter/services.dart';
 import 'package:nir_app/Models/Models_data.dart';
 import 'package:nir_app/Theme/app_color.dart';
 import 'package:nir_app/ar_screen/ar_screen_model.dart';
+import 'package:nir_app/furniture_list_screen/furniture_list_widget.dart';
+import 'package:nir_app/furniture_list_screen/list_add_furniture.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'package:provider/provider.dart';
 
 
-class ARScreenidget extends StatefulWidget {
+class ARScreenWidget extends StatefulWidget {
 
-  ARScreenidget({Key? key}) : super(key: key);
+  ARScreenWidget({Key? key}) : super(key: key);
 
   @override
-  _ARScreenidgetState createState() => _ARScreenidgetState();
+  _ARScreenWidgetState createState() => _ARScreenWidgetState();
 }
 
-class _ARScreenidgetState extends State<ARScreenidget> {
+class _ARScreenWidgetState extends State<ARScreenWidget> {
   late ARSessionManager arSessionManager;
   late ARObjectManager arObjectManager;
   late ARAnchorManager arAnchorManager;
 
   List<ARNode> nodes = [];
   List<ARAnchor> anchors = [];
+  var newIndex = 1;
 
 
   @override
@@ -77,9 +81,60 @@ class _ARScreenidgetState extends State<ARScreenidget> {
                               fontSize: 16),
                         ),
                       ),
+                      ElevatedButton(
+                        onPressed: () {
+                            newIndex = _navigateAndDisplaySelection(context);
+                        },
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(
+                                        3))),
+                            backgroundColor:
+                            MaterialStateProperty.all(
+                                AppColors.mainDark),
+                            minimumSize:
+                            MaterialStateProperty.all(
+                                const Size(108, 38))),
+                        child: const Text(
+                          'Добавить мебель',
+                          style: TextStyle(
+                              color: Color.fromARGB(
+                                  255, 255, 255, 255),
+                              fontSize: 16),
+                        ),
+                      ),
                     ]),
               )
             ])));
+  }
+
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const AddFurniture(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
+  Future<int> _navigateAndDisplaySelection(BuildContext context) async {
+
+    final result = await Navigator.of(context).push(_createRoute());
+    // When a BuildContext is used from a StatefulWidget, the mounted property
+    // must be checked after an asynchronous gap.
+    if (!mounted) return 0;
+    return result;
   }
 
   void onARViewCreated(
@@ -109,38 +164,45 @@ class _ARScreenidgetState extends State<ARScreenidget> {
     this.arObjectManager.onRotationEnd = onRotationEnded;
   }
 
+
   Future<void> onRemoveEverything() async {
     /*nodes.forEach((node) {
       this.arObjectManager.removeNode(node);
     });*/
-    anchors.forEach((anchor) {
-      this.arAnchorManager.removeAnchor(anchor);
-    });
+    for (var anchor in anchors) {
+      arAnchorManager.removeAnchor(anchor);
+    }
     anchors = [];
   }
 
   Future<void> onPlaneOrPointTapped(
       List<ARHitTestResult> hitTestResults) async {
+    print("--------------------------------------------------");
+    final a = context.findAncestorStateOfType<_ARScreenWidgetState>()?.newIndex ?? 1;
     final model = context.read<ARScreenModel>();
     var singleHitTestResult = hitTestResults.firstWhere(
             (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
     if (singleHitTestResult != null) {
       var newAnchor =
       ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
-      bool? didAddAnchor = await this.arAnchorManager.addAnchor(newAnchor);
+      bool? didAddAnchor = await arAnchorManager.addAnchor(newAnchor);
       if (didAddAnchor!) {
-        this.anchors.add(newAnchor);
+        anchors.add(newAnchor);
         var node = Models.models[model.indexx];
+        // var node = Models.models[a];
+        if(a>0){
+          var node = Models.models[a];
+        }
         var newNode = node.node;
         bool? didAddNodeToAnchor =
-        await this.arObjectManager.addNode(newNode, planeAnchor: newAnchor);
+        await arObjectManager.addNode(newNode, planeAnchor: newAnchor);
         if (didAddNodeToAnchor!) {
-          this.nodes.add(newNode);
+          nodes.add(newNode);
         } else {
-          this.arSessionManager.onError("Adding Node to Anchor failed");
+          arSessionManager.onError("Adding Node to Anchor failed");
         }
       } else {
-        this.arSessionManager.onError("Adding Anchor failed");
+        arSessionManager.onError("Adding Anchor failed");
       }
     }
   }
@@ -156,7 +218,7 @@ class _ARScreenidgetState extends State<ARScreenidget> {
   onPanEnded(String nodeName, Matrix4 newTransform) {
     print("Ended panning node " + nodeName);
     final pannedNode =
-    this.nodes.firstWhere((element) => element.name == nodeName);
+    nodes.firstWhere((element) => element.name == nodeName);
 
     /*
     * Uncomment the following command if you want to keep the transformations of the Flutter representations of the nodes up to date
@@ -176,7 +238,7 @@ class _ARScreenidgetState extends State<ARScreenidget> {
   onRotationEnded(String nodeName, Matrix4 newTransform) {
     print("Ended rotating node " + nodeName);
     final rotatedNode =
-    this.nodes.firstWhere((element) => element.name == nodeName);
+    nodes.firstWhere((element) => element.name == nodeName);
 
     /*
     * Uncomment the following command if you want to keep the transformations of the Flutter representations of the nodes up to date
