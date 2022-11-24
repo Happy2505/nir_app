@@ -38,6 +38,7 @@ class _AddFurnitureState extends State<AddFurniture> {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.only(top: 25, left: 20, right: 20),
             child: Container(
@@ -52,7 +53,7 @@ class _AddFurnitureState extends State<AddFurniture> {
   Widget _buildPanel() {
     return ExpansionPanelList(
       elevation: 0,
-      animationDuration: const Duration(seconds: 1),
+      animationDuration: const Duration(milliseconds: 500),
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
           category[index].isExpanded = !isExpanded;

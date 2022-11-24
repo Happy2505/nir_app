@@ -83,7 +83,7 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                            newIndex = _navigateAndDisplaySelection(context);
+                            newIndex = _navigateAndDisplaySelection(context) as int;
                         },
                         style: ButtonStyle(
                             shape: MaterialStateProperty.all<
