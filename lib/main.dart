@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:nir_app/ar_screen/ar_screen_widget.dart';
+import 'package:nir_app/database/hive_names.dart';
+import 'package:nir_app/database/savePlan.dart';
 import 'package:nir_app/navigation/home_page.dart';
 import 'package:nir_app/start_screen/start_screen_widget.dart';
 import 'package:nir_app/welcome_screen/welcome_screen_widget.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'catalog_furniture_screen/catalog_furniture.dart';
 import 'furniture_list_screen/furniture_list_widget.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  if (!Hive.isAdapterRegistered(0)) {
+    Hive.registerAdapter(SavePlanAdapter());
+  }
+  await Hive.openBox<SavePlan>(HiveBoxes.savePlan);
   runApp(const MyApp());
 }
 
@@ -47,6 +56,12 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
+
+  @override
+  void dispose() async {
+    Hive.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

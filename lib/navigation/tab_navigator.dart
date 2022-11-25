@@ -18,7 +18,7 @@ class TabNavigator extends StatelessWidget {
         if (tabItem == TabItem.Katalog1) {
           currentPage = const CatalogFurniture();
         } else if (tabItem == TabItem.Katalog2) {
-          currentPage = const ProfileWidget();
+          currentPage = ProfileWidget();
         } else {
           currentPage = const CatalogFurniture();
         }

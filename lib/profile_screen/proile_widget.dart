@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nir_app/Theme/app_color.dart';
 import 'package:nir_app/factoryes/screen_factory.dart';
+import 'package:nir_app/profile_screen/save_plane.dart';
 import 'package:provider/provider.dart';
 
 class ProfileWidget extends StatelessWidget {
-  const ProfileWidget({Key? key}) : super(key: key);
+  ProfileWidget({Key? key}) : super(key: key);
+  final _screenFactory = ScreenFactory();
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +76,34 @@ class ProfileWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
                       Text('Избранное',
+                          style: TextStyle(
+                              fontFamily: 'Jost',
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.mainDark)),
+                      Icon(Icons.arrow_forward_ios_rounded, color: AppColors.mainDark, size: 18,)
+                    ],
+                  )),
+              const SizedBox(height: 23),
+              ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          const Color.fromARGB(255, 233, 233, 233)),
+                      padding: MaterialStateProperty.all(
+                          const EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 16)),
+                      elevation: MaterialStateProperty.all(0),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0)))),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (_) =>  _screenFactory.SavePlanWidget()),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text('Сохраненная планировка',
                           style: TextStyle(
                               fontFamily: 'Jost',
                               fontSize: 17,

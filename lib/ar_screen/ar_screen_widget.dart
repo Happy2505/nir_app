@@ -14,7 +14,6 @@ import 'package:flutter/services.dart';
 import 'package:nir_app/Models/Models_data.dart';
 import 'package:nir_app/Theme/app_color.dart';
 import 'package:nir_app/ar_screen/ar_screen_model.dart';
-import 'package:nir_app/furniture_list_screen/furniture_list_widget.dart';
 import 'package:nir_app/furniture_list_screen/list_add_furniture.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +21,7 @@ import 'package:provider/provider.dart';
 
 class ARScreenWidget extends StatefulWidget {
 
-  ARScreenWidget({Key? key}) : super(key: key);
+  const ARScreenWidget({Key? key}) : super(key: key);
 
   @override
   _ARScreenWidgetState createState() => _ARScreenWidgetState();
@@ -38,6 +37,7 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
   var newIndex = 1;
 
 
+
   @override
   void dispose() {
     super.dispose();
@@ -47,68 +47,68 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-            child: Stack(children: [
-              ARView(
-                onARViewCreated: onARViewCreated,
-                planeDetectionConfig: PlaneDetectionConfig.horizontal,
-              ),
-              Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: onRemoveEverything,
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(
-                                        3))),
-                            backgroundColor:
-                            MaterialStateProperty.all(
-                                const Color.fromARGB(
-                                    255, 240, 240, 240)),
-                            minimumSize:
-                            MaterialStateProperty.all(
-                                const Size(108, 38))),
-                        child: const Text(
-                          'Удалить',
-                          style: TextStyle(
-                              color: AppColors.mainDark,
-                              fontSize: 16),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                            newIndex = _navigateAndDisplaySelection(context) as int;
-                        },
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(
-                                        3))),
-                            backgroundColor:
-                            MaterialStateProperty.all(
-                                AppColors.mainDark),
-                            minimumSize:
-                            MaterialStateProperty.all(
-                                const Size(108, 38))),
-                        child: const Text(
-                          'Добавить мебель',
-                          style: TextStyle(
-                              color: Color.fromARGB(
-                                  255, 255, 255, 255),
-                              fontSize: 16),
-                        ),
-                      ),
-                    ]),
-              )
-            ])));
+        body: Stack(
+            children: [
+          ARView(
+            onARViewCreated: onARViewCreated,
+            planeDetectionConfig: PlaneDetectionConfig.horizontal,
+          ),
+          Align(
+            alignment: FractionalOffset.bottomCenter,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: onRemoveEverything,
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<
+                            RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(
+                                    3))),
+                        backgroundColor:
+                        MaterialStateProperty.all(
+                            const Color.fromARGB(
+                                255, 240, 240, 240)),
+                        minimumSize:
+                        MaterialStateProperty.all(
+                            const Size(108, 38))),
+                    child: const Text(
+                      'Удалить',
+                      style: TextStyle(
+                          color: AppColors.mainDark,
+                          fontSize: 16),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                        newIndex = _navigateAndDisplaySelection(context) as int;
+                    },
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<
+                            RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(
+                                    3))),
+                        backgroundColor:
+                        MaterialStateProperty.all(
+                            AppColors.mainDark),
+                        minimumSize:
+                        MaterialStateProperty.all(
+                            const Size(108, 38))),
+                    child: const Text(
+                      'Добавить мебель',
+                      style: TextStyle(
+                          color: Color.fromARGB(
+                              255, 255, 255, 255),
+                          fontSize: 16),
+                    ),
+                  ),
+                ]),
+          )
+        ]));
   }
 
   Route _createRoute() {
@@ -177,7 +177,6 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
 
   Future<void> onPlaneOrPointTapped(
       List<ARHitTestResult> hitTestResults) async {
-    print("--------------------------------------------------");
     final a = context.findAncestorStateOfType<_ARScreenWidgetState>()?.newIndex ?? 1;
     final model = context.read<ARScreenModel>();
     var singleHitTestResult = hitTestResults.firstWhere(
@@ -185,14 +184,13 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
     if (singleHitTestResult != null) {
       var newAnchor =
       ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
+      var s = newAnchor.transformation.setTranslationRaw(0.2, 0.0, 0.2);
+      var ss = newAnchor.transformation.setRotationX(1.0);
       bool? didAddAnchor = await arAnchorManager.addAnchor(newAnchor);
       if (didAddAnchor!) {
         anchors.add(newAnchor);
         var node = Models.models[model.indexx];
-        // var node = Models.models[a];
-        if(a>0){
-          var node = Models.models[a];
-        }
+        print("~~~~~~~~~~~~~~~~~~${newAnchor.transformation.getTranslation()}~~~~~~~~~~~~~~~~~~~~");
         var newNode = node.node;
         bool? didAddNodeToAnchor =
         await arObjectManager.addNode(newNode, planeAnchor: newAnchor);
@@ -247,26 +245,3 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
     //rotatedNode.transform = newTransform;
   }
 }
-
-// void test() async{
-//   if(localObject!=null){
-//     arObjectManager.removeNode(localObject!);
-//     localObject = null;
-//   }else{
-//     var newNode = ARNode(
-//         type: NodeType.webGLB,
-//         uri:
-//         // "assets/Chicken_01/Chicken_01.gltf",
-//         "https://github.com/KhronosGroup/glTF-Sample-Models/blob/master/2.0/Duck/glTF-Binary/Duck.glb",
-//         scale: Vector3(0.1, 0.1, 0.1),
-//         position: Vector3(0.0, 0.0, 0.0),
-//         rotation: Vector4(1.0, 0.0, 0.0, 0.0));
-//     bool? didAddLocalNode =
-//     await arObjectManager.addNode(newNode);
-//     if (didAddLocalNode!) {
-//       localObject = newNode;
-//     } else {
-//       localObject = null;
-//     }
-//   }
-// }
