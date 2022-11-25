@@ -7,7 +7,7 @@ class SavePlaneModel extends ChangeNotifier{
   SavePlaneModel() {
     lalala();
   }
-  final listBox = <SavePlan>[];
+  var listBox = <SavePlan>[];
   late var length = 0;
 
   void lalala() async{
@@ -17,5 +17,20 @@ class SavePlaneModel extends ChangeNotifier{
     for(int i = 0; i < length; i++){
       listBox.add(box.getAt(i)!) ;
     }
+    box.listenable().addListener(() {
+      listBox = <SavePlan>[];
+      length = box.values.length;
+      for(int i = 0; i < length; i++){
+        listBox.add(box.getAt(i)!) ;
+      }
+      notifyListeners();
+    });
+    notifyListeners();
+    // box.add(SavePlan(id: 5, idFurniture: 4, positionX: 1, positionY: 1,positionZ: 1,rotation: 1,name: "name", data: DateTime.now()));
+  }
+
+  void deletedPlane(int planeIndex) async{
+    Box<SavePlan> box = Hive.box<SavePlan>(HiveBoxes.savePlan);
+    await box.deleteAt(planeIndex);
   }
 }
