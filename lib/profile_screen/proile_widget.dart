@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 
 class ProfileWidget extends StatelessWidget {
   ProfileWidget({Key? key}) : super(key: key);
-  final _screenFactory = ScreenFactory();
-
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +94,7 @@ class ProfileWidget extends StatelessWidget {
                       shape: MaterialStateProperty.all(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0)))),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (_) =>  _screenFactory.SavePlanWidget()),
-                    );
+                    Navigator.of(context).push(_createRoute());
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,4 +173,25 @@ class ProfileWidget extends StatelessWidget {
           ),
         ));
   }
+}
+
+
+Route _createRoute() {
+  final screenFactory = ScreenFactory();
+
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>  screenFactory.SavePlanWidget(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
