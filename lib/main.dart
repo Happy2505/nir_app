@@ -13,10 +13,6 @@ import 'furniture_list_screen/furniture_list_widget.dart';
 
 void main() async {
   await Hive.initFlutter();
-  if (!Hive.isAdapterRegistered(0)) {
-    Hive.registerAdapter(SavePlanAdapter());
-  }
-  await Hive.openBox<SavePlan>(HiveBoxes.savePlan);
   runApp(const MyApp());
 }
 

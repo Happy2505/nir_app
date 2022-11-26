@@ -5,6 +5,7 @@ import 'package:nir_app/profile_screen/save_plane_model.dart';
 import 'package:provider/provider.dart';
 
 import '../ar_screen/ar_screen_model.dart';
+import '../ar_screen/load_save_furniture_model.dart';
 
 class ScreenFactory {
   Widget ARScreen(int index) {
@@ -20,4 +21,11 @@ class ScreenFactory {
       child: const SavePlanPage(),
     );
   }
+}
+
+Widget ARScreen(int planeKey) {
+  return ChangeNotifierProvider(
+    create: (_) => LoadSaveFurnitureModel(planeKey),
+    child: const ARScreenWidget(),
+  );
 }

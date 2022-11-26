@@ -16,6 +16,28 @@ class _SavePlanPageState extends State<SavePlanPage> {
   @override
   Widget build(BuildContext context) {
     final model = context.watch<SavePlaneModel>();
+    if (model.length == 0) {
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.keyboard_arrow_down_rounded ,size: 30,),
+              color: AppColors.mainDark),
+          title: const Text("Сохраненная планировка",
+              style: TextStyle(
+                  fontFamily: 'Jost',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 17,
+                  letterSpacing: -0.17,
+                  color: AppColors.mainDark)),
+        ),
+
+        body: const Center(child: Text("Сохранений нет!", style: TextStyle(fontSize: 19),)),
+      );
+    }
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -23,7 +45,7 @@ class _SavePlanPageState extends State<SavePlanPage> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: const Icon(Icons.arrow_back_ios),
+              icon: const Icon(Icons.keyboard_arrow_down_rounded ,size: 30,),
               color: AppColors.mainDark),
           title: const Text("Сохраненная планировка",
               style: TextStyle(
@@ -39,11 +61,6 @@ class _SavePlanPageState extends State<SavePlanPage> {
             separatorBuilder: (BuildContext context, int index) { return const Divider(); },
             itemCount: model.length,
             itemBuilder: (context, index) {
-              if (model.length == 0) {
-                return const Center(
-                  child: Text("Todo list is empty"),
-                );
-              }
               final savePlane = model.listBox[index];
               return Slidable(
                   endActionPane: ActionPane(
@@ -68,7 +85,9 @@ class _SavePlanPageState extends State<SavePlanPage> {
                   child: ListTile(
                       title: Text("Запись: ${savePlane.name}", style: const TextStyle(fontSize: 18)),
                       subtitle: Text(
-                          "${savePlane.data.day}.${savePlane.data.month}.${savePlane.data.year}    ${savePlane.data.hour}:${savePlane.data.minute}"),
+                        "${savePlane.rotation}   ${savePlane.positionX} ${savePlane.positionY}   ${savePlane.positionZ}"
+                          // "${savePlane.data.day}.${savePlane.data.month}.${savePlane.data.year}    ${savePlane.data.hour}:${savePlane.data.minute}"
+                      ),
                       onTap: () {
                         // res.save();
                       })

@@ -11,12 +11,17 @@ import 'package:ar_flutter_plugin/datatypes/hittest_result_types.dart';
 import 'package:ar_flutter_plugin/models/ar_node.dart';
 import 'package:ar_flutter_plugin/models/ar_hittest_result.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nir_app/Models/Models_data.dart';
 import 'package:nir_app/Theme/app_color.dart';
 import 'package:nir_app/ar_screen/ar_screen_model.dart';
+import 'package:nir_app/database/hive_names.dart';
+import 'package:nir_app/database/savePlan.dart';
 import 'package:nir_app/furniture_list_screen/list_add_furniture.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'package:provider/provider.dart';
+
+import '../database/info.dart';
 
 
 class ARScreenWidget extends StatefulWidget {
@@ -55,58 +60,28 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
           ),
           Align(
             alignment: FractionalOffset.bottomCenter,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: onRemoveEverything,
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all<
-                            RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(
-                                    3))),
-                        backgroundColor:
-                        MaterialStateProperty.all(
-                            const Color.fromARGB(
-                                255, 240, 240, 240)),
-                        minimumSize:
-                        MaterialStateProperty.all(
-                            const Size(108, 38))),
-                    child: const Text(
-                      'Удалить',
-                      style: TextStyle(
-                          color: AppColors.mainDark,
-                          fontSize: 16),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 15.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                      onPressed: () {
                         newIndex = _navigateAndDisplaySelection(context) as int;
-                    },
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all<
-                            RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(
-                                    3))),
-                        backgroundColor:
-                        MaterialStateProperty.all(
-                            AppColors.mainDark),
-                        minimumSize:
-                        MaterialStateProperty.all(
-                            const Size(108, 38))),
-                    child: const Text(
-                      'Добавить мебель',
-                      style: TextStyle(
-                          color: Color.fromARGB(
-                              255, 255, 255, 255),
-                          fontSize: 16),
+                        },
+                      icon: const Icon(Icons.add_circle_outline_rounded, size: 35, color: Color.fromARGB(255, 255, 255, 255)),
                     ),
-                  ),
-                ]),
+                    IconButton(
+                      onPressed: onRemoveEverything,
+                      icon: const Icon(Icons.delete_outline_rounded, size: 35, color: Color.fromARGB(255, 255, 255, 255)),
+                    ),
+                    IconButton(
+                      onPressed: onSavePlane,
+                      icon: const Icon(Icons.save_alt_rounded, size: 35, color: Color.fromARGB(255, 255, 255, 255)),
+                    ),
+                  ]
+              ),
+            ),
           )
         ]));
   }
@@ -131,8 +106,6 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
   Future<int> _navigateAndDisplaySelection(BuildContext context) async {
 
     final result = await Navigator.of(context).push(_createRoute());
-    // When a BuildContext is used from a StatefulWidget, the mounted property
-    // must be checked after an asynchronous gap.
     if (!mounted) return 0;
     return result;
   }
@@ -164,6 +137,30 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
     this.arObjectManager.onRotationEnd = onRotationEnded;
   }
 
+  Future<void> onSavePlane() async{
+    if(anchors.isEmpty) return;
+    if (!Hive.isAdapterRegistered(0)) {
+      Hive.registerAdapter(SavePlanAdapter());
+    }
+    if (!Hive.isAdapterRegistered(1)) {
+      Hive.registerAdapter(InfoAdapter());
+    }
+    final planeBox = Hive.openBox<SavePlan>(HiveBoxes.savePlan);
+    for (var anchor in anchors) {
+      var a = <double>[8];
+      Vector3 pos = anchor.transformation.getTranslation();
+      double posX = pos.x;
+      double posY = pos.y;
+      double posZ = pos.z;
+      Matrix3 rotation = anchor.transformation.getRotation();
+      // rotation.getColumn(1).x;
+      print(rotation);
+      double rotationX = rotation.getColumn(1).x;
+      box.add(SavePlan(id: 5, idFurniture: 4, positionX: posX, positionY: posY, positionZ: posZ, rotation: rotationX, name: "name", data: DateTime.now()));
+    }
+
+  }
+
 
   Future<void> onRemoveEverything() async {
     /*nodes.forEach((node) {
@@ -184,8 +181,8 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
     if (singleHitTestResult != null) {
       var newAnchor =
       ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
-      var s = newAnchor.transformation.setTranslationRaw(0.2, 0.0, 0.2);
-      var ss = newAnchor.transformation.setRotationX(1.0);
+      // var s = newAnchor.transformation.setTranslationRaw(0.2, 0.0, 0.2);
+      // var ss = newAnchor.transformation.setRotationX(1.0);
       bool? didAddAnchor = await arAnchorManager.addAnchor(newAnchor);
       if (didAddAnchor!) {
         anchors.add(newAnchor);
@@ -196,6 +193,8 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
         await arObjectManager.addNode(newNode, planeAnchor: newAnchor);
         if (didAddNodeToAnchor!) {
           nodes.add(newNode);
+          print(newNode.name);
+          print(newNode.uri);
         } else {
           arSessionManager.onError("Adding Node to Anchor failed");
         }

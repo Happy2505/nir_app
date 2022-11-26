@@ -1,40 +1,47 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'savePlan.dart';
+part of 'info.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SavePlanAdapter extends TypeAdapter<SavePlan> {
+class InfoAdapter extends TypeAdapter<Info> {
   @override
-  final int typeId = 0;
+  final int typeId = 1;
 
   @override
-  SavePlan read(BinaryReader reader) {
+  Info read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return SavePlan(
+    return Info(
       id: fields[0] as int,
-      data: fields[1] as DateTime,
-      name: fields[2] as String,
-    )..furniture = (fields[3] as HiveList?)?.castHiveList();
+      urlFurniture: fields[1] as String,
+      positionX: fields[2] as double,
+      positionY: fields[3] as double,
+      positionZ: fields[4] as double,
+      rotation: fields[5] as double,
+    );
   }
 
   @override
-  void write(BinaryWriter writer, SavePlan obj) {
+  void write(BinaryWriter writer, Info obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.data)
+      ..write(obj.urlFurniture)
       ..writeByte(2)
-      ..write(obj.name)
+      ..write(obj.positionX)
       ..writeByte(3)
-      ..write(obj.furniture);
+      ..write(obj.positionY)
+      ..writeByte(4)
+      ..write(obj.positionZ)
+      ..writeByte(5)
+      ..write(obj.rotation);
   }
 
   @override
@@ -43,7 +50,7 @@ class SavePlanAdapter extends TypeAdapter<SavePlan> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SavePlanAdapter &&
+      other is InfoAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
