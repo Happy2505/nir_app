@@ -85,7 +85,7 @@ class _SavePlanPageState extends State<SavePlanPage> {
                   child: ListTile(
                       title: Text("Запись: ${savePlane.name}", style: const TextStyle(fontSize: 18)),
                       subtitle: Text(
-                        "${savePlane.rotation}   ${savePlane.positionX} ${savePlane.positionY}   ${savePlane.positionZ}"
+                        "${savePlane.name}   ${savePlane.furniture} "
                           // "${savePlane.data.day}.${savePlane.data.month}.${savePlane.data.year}    ${savePlane.data.hour}:${savePlane.data.minute}"
                       ),
                       onTap: () {

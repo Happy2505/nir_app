@@ -22,6 +22,7 @@ import 'package:vector_math/vector_math_64.dart';
 import 'package:provider/provider.dart';
 
 import '../database/info.dart';
+import 'load_save_furniture_model.dart';
 
 
 class ARScreenWidget extends StatefulWidget {
@@ -39,7 +40,7 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
 
   List<ARNode> nodes = [];
   List<ARAnchor> anchors = [];
-  var newIndex = 1;
+  var newIndex = -1;
 
 
 
@@ -51,12 +52,18 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final model = context.watch<ARScreenModel>();
+    newIndex = model.indexx;
     return Scaffold(
         body: Stack(
             children: [
           ARView(
             onARViewCreated: onARViewCreated,
             planeDetectionConfig: PlaneDetectionConfig.horizontal,
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(color:AppColors.mainDark, child: Text(newIndex.toString())),
           ),
           Align(
             alignment: FractionalOffset.bottomCenter,
@@ -67,8 +74,9 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
                   children: [
                     IconButton(
                       onPressed: () {
-                        newIndex = _navigateAndDisplaySelection(context) as int;
-                        },
+                        _navigateAndDisplaySelection(context);
+                        print(newIndex);
+                      },
                       icon: const Icon(Icons.add_circle_outline_rounded, size: 35, color: Color.fromARGB(255, 255, 255, 255)),
                     ),
                     IconButton(
@@ -105,9 +113,10 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
   }
   Future<int> _navigateAndDisplaySelection(BuildContext context) async {
 
-    final result = await Navigator.of(context).push(_createRoute());
+    newIndex = await Navigator.of(context).push(_createRoute());
     if (!mounted) return 0;
-    return result;
+    print(newIndex);
+    return newIndex;
   }
 
   void onARViewCreated(
@@ -139,24 +148,30 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
 
   Future<void> onSavePlane() async{
     if(anchors.isEmpty) return;
+    // final planeKey = context.read<LoadSaveFurnitureModel>().planeKey;
     if (!Hive.isAdapterRegistered(0)) {
       Hive.registerAdapter(SavePlanAdapter());
     }
     if (!Hive.isAdapterRegistered(1)) {
       Hive.registerAdapter(InfoAdapter());
     }
-    final planeBox = Hive.openBox<SavePlan>(HiveBoxes.savePlan);
-    for (var anchor in anchors) {
-      var a = <double>[8];
-      Vector3 pos = anchor.transformation.getTranslation();
+    final planeBox = await Hive.openBox<SavePlan>(HiveBoxes.savePlan);
+    final planeKey = planeBox.add(SavePlan(id: 1, data: DateTime.now(), name: 'Запись'));
+    final plane = planeBox.get(planeKey);
+    final infoBox = await Hive.openBox<Info>(HiveBoxes.info);
+    for(int i=0; i<anchors.length; i++) {
+      Vector3 pos = anchors[i].transformation.getTranslation();
       double posX = pos.x;
       double posY = pos.y;
       double posZ = pos.z;
-      Matrix3 rotation = anchor.transformation.getRotation();
-      // rotation.getColumn(1).x;
-      print(rotation);
+      Matrix3 rotation = anchors[i].transformation.getRotation();
       double rotationX = rotation.getColumn(1).x;
-      box.add(SavePlan(id: 5, idFurniture: 4, positionX: posX, positionY: posY, positionZ: posZ, rotation: rotationX, name: "name", data: DateTime.now()));
+      final info = Info(id: 5, positionX: posX, positionY: posY, positionZ: posZ, rotation: rotationX, urlFurniture: nodes[i].uri);
+      await infoBox.add(info);
+
+
+      plane?.addFurnitureInfo(infoBox, info);
+      // box.add(SavePlan(id: 5, idFurniture: 4, positionX: posX, positionY: posY, positionZ: posZ, rotation: rotationX, name: "name", data: DateTime.now()));
     }
 
   }
@@ -186,8 +201,10 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
       bool? didAddAnchor = await arAnchorManager.addAnchor(newAnchor);
       if (didAddAnchor!) {
         anchors.add(newAnchor);
-        var node = Models.models[model.indexx];
-        print("~~~~~~~~~~~~~~~~~~${newAnchor.transformation.getTranslation()}~~~~~~~~~~~~~~~~~~~~");
+        if(newIndex == -1){
+          var node = Models.models[model.indexx];
+        }
+        var node = Models.models[newIndex];
         var newNode = node.node;
         bool? didAddNodeToAnchor =
         await arObjectManager.addNode(newNode, planeAnchor: newAnchor);

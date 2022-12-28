@@ -4,5 +4,5 @@ class ARScreenModel extends ChangeNotifier{
   ARScreenModel(int index){
     indexx = index;
   }
-  int indexx = 0;
+  int indexx = -1;
 }

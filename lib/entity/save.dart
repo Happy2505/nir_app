@@ -20,13 +20,13 @@ class SafePlan {
 
 @JsonSerializable()
 class Description {
-  final int idFurniture;
+  String urlFurniture;
   final double positionX;
   final double positionY;
   final double positionZ;
   final double rotation;
 
-  Description(this.idFurniture, this.positionX, this.positionY, this.positionZ, this.rotation);
+  Description(this.urlFurniture, this.positionX, this.positionY, this.positionZ, this.rotation);
 
 
 

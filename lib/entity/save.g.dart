@@ -19,7 +19,7 @@ Map<String, dynamic> _$SafePlanToJson(SafePlan instance) => <String, dynamic>{
     };
 
 Description _$DescriptionFromJson(Map<String, dynamic> json) => Description(
-      json['idFurniture'] as int,
+      json['urlFurniture'] as String,
       (json['positionX'] as num).toDouble(),
       (json['positionY'] as num).toDouble(),
       (json['positionZ'] as num).toDouble(),
@@ -28,7 +28,7 @@ Description _$DescriptionFromJson(Map<String, dynamic> json) => Description(
 
 Map<String, dynamic> _$DescriptionToJson(Description instance) =>
     <String, dynamic>{
-      'idFurniture': instance.idFurniture,
+      'idFurniture': instance.urlFurniture,
       'positionX': instance.positionX,
       'positionY': instance.positionY,
       'positionZ': instance.positionZ,

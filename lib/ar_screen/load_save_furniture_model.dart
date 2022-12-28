@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class LoadSaveFurnitureModel extends ChangeNotifier{
   LoadSaveFurnitureModel(int planeKey){
-    indexx = planeKey;
+    planeKey = planeKey;
   }
-  int indexx = 0;
+  int planeKey = 0;
 }
