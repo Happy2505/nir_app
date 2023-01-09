@@ -16,11 +16,11 @@ class TabNavigator extends StatelessWidget {
       onGenerateRoute: (routeSettings) {
         Widget currentPage;
         if (tabItem == TabItem.Katalog1) {
-          currentPage = const CatalogFurniture();
+          currentPage = CatalogFurniture();
         } else if (tabItem == TabItem.Katalog2) {
           currentPage = ProfileWidget();
         } else {
-          currentPage = const CatalogFurniture();
+          currentPage = CatalogFurniture();
         }
 
         return MaterialPageRoute(builder: (context) => currentPage);

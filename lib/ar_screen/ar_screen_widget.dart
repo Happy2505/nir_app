@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:ar_flutter_plugin/managers/ar_location_manager.dart';
 import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
@@ -11,22 +13,16 @@ import 'package:ar_flutter_plugin/datatypes/hittest_result_types.dart';
 import 'package:ar_flutter_plugin/models/ar_node.dart';
 import 'package:ar_flutter_plugin/models/ar_hittest_result.dart';
 import 'package:flutter/services.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nir_app/Models/Models_data.dart';
-import 'package:nir_app/Theme/app_color.dart';
 import 'package:nir_app/ar_screen/ar_screen_model.dart';
-import 'package:nir_app/database/hive_names.dart';
-import 'package:nir_app/database/savePlan.dart';
 import 'package:nir_app/furniture_list_screen/list_add_furniture.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'package:provider/provider.dart';
-
-import '../database/info.dart';
-import 'load_save_furniture_model.dart';
+import '../entity/save.dart';
+import 'package:path_provider/path_provider.dart' as pathProvider;
 
 
 class ARScreenWidget extends StatefulWidget {
-
   const ARScreenWidget({Key? key}) : super(key: key);
 
   @override
@@ -42,8 +38,6 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
   List<ARAnchor> anchors = [];
   var newIndex = -1;
 
-
-
   @override
   void dispose() {
     super.dispose();
@@ -55,54 +49,55 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
     final model = context.watch<ARScreenModel>();
     newIndex = model.indexx;
     return Scaffold(
-        body: Stack(
-            children: [
-          ARView(
-            onARViewCreated: onARViewCreated,
-            planeDetectionConfig: PlaneDetectionConfig.horizontal,
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(color:AppColors.mainDark, child: Text(newIndex.toString())),
-          ),
-          Align(
-            alignment: FractionalOffset.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 15.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        _navigateAndDisplaySelection(context);
-                        print(newIndex);
-                      },
-                      icon: const Icon(Icons.add_circle_outline_rounded, size: 35, color: Color.fromARGB(255, 255, 255, 255)),
-                    ),
-                    IconButton(
-                      onPressed: onRemoveEverything,
-                      icon: const Icon(Icons.delete_outline_rounded, size: 35, color: Color.fromARGB(255, 255, 255, 255)),
-                    ),
-                    IconButton(
-                      onPressed: onSavePlane,
-                      icon: const Icon(Icons.save_alt_rounded, size: 35, color: Color.fromARGB(255, 255, 255, 255)),
-                    ),
-                  ]
-              ),
+        body: Stack(children: [
+      ARView(
+        onARViewCreated: onARViewCreated,
+        planeDetectionConfig: PlaneDetectionConfig.horizontal,
+      ),
+      // Align(
+      //   alignment: Alignment.centerLeft,
+      //   child: Container(color:AppColors.mainDark, child: Text(newIndex.toString())),
+      // ),
+      Align(
+        alignment: FractionalOffset.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 15.0),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            IconButton(
+              onPressed: () {
+                _navigateAndDisplaySelection(context);
+              },
+              icon: const Icon(Icons.add_circle_outline_rounded,
+                  size: 35, color: Color.fromARGB(255, 255, 255, 255)),
             ),
-          )
-        ]));
+            IconButton(
+              onPressed: onRemoveEverything,
+              icon: const Icon(Icons.delete_outline_rounded,
+                  size: 35, color: Color.fromARGB(255, 255, 255, 255)),
+            ),
+            IconButton(
+              onPressed: onSavePlane,
+              icon: const Icon(Icons.save_alt_rounded,
+                  size: 35, color: Color.fromARGB(255, 255, 255, 255)),
+            ),
+          ]),
+        ),
+      )
+    ]));
   }
 
   Route _createRoute() {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const AddFurniture(),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          const AddFurniture(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0.0, 1.0);
-        const end = Offset.zero;
+        const begin = Offset(0.0, 1);
+        const end = Offset(0.0, 0.0);
         const curve = Curves.ease;
 
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
         return SlideTransition(
           position: animation.drive(tween),
@@ -111,8 +106,8 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
       },
     );
   }
-  Future<int> _navigateAndDisplaySelection(BuildContext context) async {
 
+  Future<int> _navigateAndDisplaySelection(BuildContext context) async {
     newIndex = await Navigator.of(context).push(_createRoute());
     if (!mounted) return 0;
     print(newIndex);
@@ -129,12 +124,12 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
     this.arAnchorManager = arAnchorManager;
 
     this.arSessionManager.onInitialize(
-      showFeaturePoints: false,
-      showPlanes: true,
-      // customPlaneTexturePath: "assets/triangle.png",
-      handlePans: true,
-      handleRotation: true,
-    );
+          showFeaturePoints: false,
+          showPlanes: true,
+          // customPlaneTexturePath: "assets/triangle.png",
+          handlePans: true,
+          handleRotation: true,
+        );
     this.arObjectManager.onInitialize();
 
     this.arSessionManager.onPlaneOrPointTap = onPlaneOrPointTapped;
@@ -146,41 +141,33 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
     this.arObjectManager.onRotationEnd = onRotationEnded;
   }
 
-  Future<void> onSavePlane() async{
-    if(anchors.isEmpty) return;
-    // final planeKey = context.read<LoadSaveFurnitureModel>().planeKey;
-    if (!Hive.isAdapterRegistered(0)) {
-      Hive.registerAdapter(SavePlanAdapter());
-    }
-    if (!Hive.isAdapterRegistered(1)) {
-      Hive.registerAdapter(InfoAdapter());
-    }
-    final planeBox = await Hive.openBox<SavePlan>(HiveBoxes.savePlan);
-    final planeKey = planeBox.add(SavePlan(id: 1, data: DateTime.now(), name: 'Запись'));
-    final plane = planeBox.get(planeKey);
-    final infoBox = await Hive.openBox<Info>(HiveBoxes.info);
-    for(int i=0; i<anchors.length; i++) {
+  Future<void> onSavePlane() async {
+    if (anchors.isEmpty) return;
+    List<Description> as = [];
+    for (int i = 0; i < anchors.length; i++) {
       Vector3 pos = anchors[i].transformation.getTranslation();
       double posX = pos.x;
       double posY = pos.y;
       double posZ = pos.z;
       Matrix3 rotation = anchors[i].transformation.getRotation();
       double rotationX = rotation.getColumn(1).x;
-      final info = Info(id: 5, positionX: posX, positionY: posY, positionZ: posZ, rotation: rotationX, urlFurniture: nodes[i].uri);
-      await infoBox.add(info);
-
-
-      plane?.addFurnitureInfo(infoBox, info);
-      // box.add(SavePlan(id: 5, idFurniture: 4, positionX: posX, positionY: posY, positionZ: posZ, rotation: rotationX, name: "name", data: DateTime.now()));
+      as.add(Description(nodes[i].uri, posX, posY, posZ, rotationX));
     }
-
+    final dir = await pathProvider.getApplicationSupportDirectory();
+    final filePath = '${dir.path}/file';
+    final file = File(filePath);
+    // print(dir);
+    final ss = SafePlan(5, as);
+    final objects = ss.toJson();
+    final jsonString = jsonEncode(objects);
+    await file.writeAsString(jsonString);
+    // print(jsonString);
   }
 
-
   Future<void> onRemoveEverything() async {
-    /*nodes.forEach((node) {
+    nodes.forEach((node) {
       this.arObjectManager.removeNode(node);
-    });*/
+    });
     for (var anchor in anchors) {
       arAnchorManager.removeAnchor(anchor);
     }
@@ -189,25 +176,24 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
 
   Future<void> onPlaneOrPointTapped(
       List<ARHitTestResult> hitTestResults) async {
-    final a = context.findAncestorStateOfType<_ARScreenWidgetState>()?.newIndex ?? 1;
     final model = context.read<ARScreenModel>();
     var singleHitTestResult = hitTestResults.firstWhere(
-            (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
+        (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
     if (singleHitTestResult != null) {
       var newAnchor =
-      ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
+          ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
       // var s = newAnchor.transformation.setTranslationRaw(0.2, 0.0, 0.2);
       // var ss = newAnchor.transformation.setRotationX(1.0);
       bool? didAddAnchor = await arAnchorManager.addAnchor(newAnchor);
       if (didAddAnchor!) {
         anchors.add(newAnchor);
-        if(newIndex == -1){
+        if (newIndex == -1) {
           var node = Models.models[model.indexx];
         }
         var node = Models.models[newIndex];
         var newNode = node.node;
         bool? didAddNodeToAnchor =
-        await arObjectManager.addNode(newNode, planeAnchor: newAnchor);
+            await arObjectManager.addNode(newNode, planeAnchor: newAnchor);
         if (didAddNodeToAnchor!) {
           nodes.add(newNode);
           print(newNode.name);
@@ -231,8 +217,7 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
 
   onPanEnded(String nodeName, Matrix4 newTransform) {
     print("Ended panning node " + nodeName);
-    final pannedNode =
-    nodes.firstWhere((element) => element.name == nodeName);
+    final pannedNode = nodes.firstWhere((element) => element.name == nodeName);
 
     /*
     * Uncomment the following command if you want to keep the transformations of the Flutter representations of the nodes up to date
@@ -251,8 +236,7 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
 
   onRotationEnded(String nodeName, Matrix4 newTransform) {
     print("Ended rotating node " + nodeName);
-    final rotatedNode =
-    nodes.firstWhere((element) => element.name == nodeName);
+    final rotatedNode = nodes.firstWhere((element) => element.name == nodeName);
 
     /*
     * Uncomment the following command if you want to keep the transformations of the Flutter representations of the nodes up to date

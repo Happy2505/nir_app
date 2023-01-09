@@ -28,7 +28,7 @@ Description _$DescriptionFromJson(Map<String, dynamic> json) => Description(
 
 Map<String, dynamic> _$DescriptionToJson(Description instance) =>
     <String, dynamic>{
-      'idFurniture': instance.urlFurniture,
+      'urlFurniture': instance.urlFurniture,
       'positionX': instance.positionX,
       'positionY': instance.positionY,
       'positionZ': instance.positionZ,

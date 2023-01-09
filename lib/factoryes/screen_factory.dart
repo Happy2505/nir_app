@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 
 import '../ar_screen/ar_screen_model.dart';
 import '../ar_screen/load_save_furniture_model.dart';
+import '../furniture_list_screen/furniture_list_model.dart';
+import '../furniture_list_screen/furniture_list_widget.dart';
 
 class ScreenFactory {
   Widget ARScreen(int index) {
@@ -17,8 +19,15 @@ class ScreenFactory {
 
   Widget SavePlanWidget() {
     return ChangeNotifierProvider(
-      create: (_) => SavePlaneModel(),
+      create: (_) => AddFavorite(),
       child: const SavePlanPage(),
+    );
+  }
+
+  Widget FurniturePage(int index) {
+    return ChangeNotifierProvider(
+      create: (_) => FurnitureListModel(index),
+      child: FurnitureListWidget(),
     );
   }
 }
@@ -29,3 +38,4 @@ Widget ARScreen(int planeKey) {
     child: const ARScreenWidget(),
   );
 }
+

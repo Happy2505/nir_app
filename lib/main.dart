@@ -22,12 +22,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
         '/': (context) => const StartScreenWidget(),
         '/welcome': (context) => WelcomeScreenWidget(),
         '/home': (context) => const HomePage(),
-        '/catalog': (context) => const CatalogFurniture(),
+        '/catalog': (context) => CatalogFurniture(),
         '/catalog/furnitureList': (context) => FurnitureListWidget(),
         '/catalog/furnitureList/arFurniture': (context) => ARScreenWidget(),
       },
@@ -56,6 +57,7 @@ class _MainState extends State<Main> {
   @override
   void dispose() async {
     Hive.close();
+    Hive.deleteFromDisk();
     super.dispose();
   }
 

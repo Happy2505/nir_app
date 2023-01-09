@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nir_app/Models/Models_data.dart';
 import 'package:nir_app/Theme/app_color.dart';
 
+import '../factoryes/screen_factory.dart';
 import '../furniture_list_screen/furniture_list_widget.dart';
 
 class CatalogFurniture extends StatelessWidget {
@@ -9,8 +10,9 @@ class CatalogFurniture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    final _screenFactory = ScreenFactory();
+
+    return SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
@@ -45,7 +47,7 @@ class CatalogFurniture extends StatelessWidget {
                         return InkWell(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(
-                                builder: (_) => FurnitureListWidget()),
+                                builder: (_) => _screenFactory.FurniturePage(index)),
                             );
                           },
                           child: Container(
@@ -80,7 +82,6 @@ class CatalogFurniture extends StatelessWidget {
             ),
           ),
         ),
-      ),
     );
   }
 }

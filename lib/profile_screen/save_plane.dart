@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hive/hive.dart';
 import 'package:nir_app/profile_screen/save_plane_model.dart';
 import 'package:provider/provider.dart';
 
@@ -13,9 +14,17 @@ class SavePlanPage extends StatefulWidget {
 }
 
 class _SavePlanPageState extends State<SavePlanPage> {
+
+  @override
+  void dispose() async {
+    Hive.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<SavePlaneModel>();
+    // return Container();
+    final model = context.watch<AddFavorite>();
     if (model.length == 0) {
       return Scaffold(
         appBar: AppBar(
@@ -61,7 +70,7 @@ class _SavePlanPageState extends State<SavePlanPage> {
             separatorBuilder: (BuildContext context, int index) { return const Divider(); },
             itemCount: model.length,
             itemBuilder: (context, index) {
-              final savePlane = model.listBox[index];
+              final savePlane = model.infoBox[index];
               return Slidable(
                   endActionPane: ActionPane(
                     motion: const DrawerMotion(),
@@ -83,9 +92,9 @@ class _SavePlanPageState extends State<SavePlanPage> {
                     ],
                   ),
                   child: ListTile(
-                      title: Text("Запись: ${savePlane.name}", style: const TextStyle(fontSize: 18)),
+                      title: Text("Запись: ${savePlane.id}", style: const TextStyle(fontSize: 18)),
                       subtitle: Text(
-                        "${savePlane.name}   ${savePlane.furniture} "
+                        "gh"
                           // "${savePlane.data.day}.${savePlane.data.month}.${savePlane.data.year}    ${savePlane.data.hour}:${savePlane.data.minute}"
                       ),
                       onTap: () {
