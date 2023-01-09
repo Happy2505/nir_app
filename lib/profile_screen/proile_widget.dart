@@ -4,6 +4,8 @@ import 'package:nir_app/factoryes/screen_factory.dart';
 import 'package:nir_app/profile_screen/save_plane.dart';
 import 'package:provider/provider.dart';
 
+import 'favorite_widgt.dart';
+
 class ProfileWidget extends StatelessWidget {
   ProfileWidget({Key? key}) : super(key: key);
 
@@ -69,37 +71,14 @@ class ProfileWidget extends StatelessWidget {
                       elevation: MaterialStateProperty.all(0),
                       shape: MaterialStateProperty.all(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0)))),
-                  onPressed: () {},
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('Избранное',
-                          style: TextStyle(
-                              fontFamily: 'Jost',
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.mainDark)),
-                      Icon(Icons.arrow_forward_ios_rounded, color: AppColors.mainDark, size: 18,)
-                    ],
-                  )),
-              const SizedBox(height: 23),
-              ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                          const Color.fromARGB(255, 233, 233, 233)),
-                      padding: MaterialStateProperty.all(
-                          const EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 16)),
-                      elevation: MaterialStateProperty.all(0),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)))),
                   onPressed: () {
                     Navigator.of(context).push(_createRoute());
+
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
-                      Text('Сохраненная планировка',
+                      Text('Избранное',
                           style: TextStyle(
                               fontFamily: 'Jost',
                               fontSize: 17,
@@ -180,7 +159,7 @@ Route _createRoute() {
   final screenFactory = ScreenFactory();
 
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) =>  screenFactory.SavePlanWidget(),
+    pageBuilder: (context, animation, secondaryAnimation) =>  FavoritePage(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(0.0, 1.0);
       const end = Offset.zero;

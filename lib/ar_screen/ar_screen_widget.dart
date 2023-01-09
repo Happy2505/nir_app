@@ -21,7 +21,6 @@ import 'package:provider/provider.dart';
 import '../entity/save.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
 
-
 class ARScreenWidget extends StatefulWidget {
   const ARScreenWidget({Key? key}) : super(key: key);
 
@@ -36,7 +35,8 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
 
   List<ARNode> nodes = [];
   List<ARAnchor> anchors = [];
-  var newIndex = -1;
+  var newIndex = ' ';
+  List<Description> as = [];
 
   @override
   void dispose() {
@@ -63,7 +63,7 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
         child: Padding(
           padding: const EdgeInsets.only(bottom: 15.0),
           child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
             IconButton(
               onPressed: () {
                 _navigateAndDisplaySelection(context);
@@ -76,11 +76,11 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
               icon: const Icon(Icons.delete_outline_rounded,
                   size: 35, color: Color.fromARGB(255, 255, 255, 255)),
             ),
-            IconButton(
-              onPressed: onSavePlane,
-              icon: const Icon(Icons.save_alt_rounded,
-                  size: 35, color: Color.fromARGB(255, 255, 255, 255)),
-            ),
+            // IconButton(
+            //   onPressed: onSavePlane,
+            //   icon: const Icon(Icons.save_alt_rounded,
+            //       size: 35, color: Color.fromARGB(255, 255, 255, 255)),
+            // ),
           ]),
         ),
       )
@@ -107,9 +107,9 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
     );
   }
 
-  Future<int> _navigateAndDisplaySelection(BuildContext context) async {
+  Future<String> _navigateAndDisplaySelection(BuildContext context) async {
     newIndex = await Navigator.of(context).push(_createRoute());
-    if (!mounted) return 0;
+    if (!mounted) return '';
     print(newIndex);
     return newIndex;
   }
@@ -143,7 +143,7 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
 
   Future<void> onSavePlane() async {
     if (anchors.isEmpty) return;
-    List<Description> as = [];
+
     for (int i = 0; i < anchors.length; i++) {
       Vector3 pos = anchors[i].transformation.getTranslation();
       double posX = pos.x;
@@ -158,6 +158,7 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
     final file = File(filePath);
     // print(dir);
     final ss = SafePlan(5, as);
+    print(as.length);
     final objects = ss.toJson();
     final jsonString = jsonEncode(objects);
     await file.writeAsString(jsonString);
@@ -174,30 +175,45 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
     anchors = [];
   }
 
+  void decode() async {
+    final dir = await pathProvider.getApplicationSupportDirectory();
+    final filePath = '${dir.path}/file';
+    final file = File(filePath);
+    final jsonString = await file.readAsString();
+    final json = jsonDecode(jsonString);
+    var aa = json['id'];
+    var aaa = json['info'];
+    final users = json
+        .map<SafePlan>(
+            (dynamic e) => SafePlan.fromJson(e as Map<String, dynamic>))
+        .toList();
+    print(users);
+  }
+
   Future<void> onPlaneOrPointTapped(
       List<ARHitTestResult> hitTestResults) async {
     final model = context.read<ARScreenModel>();
+    if (newIndex == ' ') {
+      final furniture = Models.models.where((m) => m.catName == model.indexx).toList();
+    }
+    final furniture = Models.models.where((m) => m.catName == newIndex).toList();
     var singleHitTestResult = hitTestResults.firstWhere(
         (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
     if (singleHitTestResult != null) {
+      // decode();
       var newAnchor =
           ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
-      // var s = newAnchor.transformation.setTranslationRaw(0.2, 0.0, 0.2);
+      // newAnchor.transformation.setTranslationRaw(0, 0.0, -2.0);
       // var ss = newAnchor.transformation.setRotationX(1.0);
       bool? didAddAnchor = await arAnchorManager.addAnchor(newAnchor);
       if (didAddAnchor!) {
         anchors.add(newAnchor);
-        if (newIndex == -1) {
-          var node = Models.models[model.indexx];
-        }
-        var node = Models.models[newIndex];
+        var node = furniture[0];
         var newNode = node.node;
         bool? didAddNodeToAnchor =
             await arObjectManager.addNode(newNode, planeAnchor: newAnchor);
         if (didAddNodeToAnchor!) {
           nodes.add(newNode);
-          print(newNode.name);
-          print(newNode.uri);
         } else {
           arSessionManager.onError("Adding Node to Anchor failed");
         }

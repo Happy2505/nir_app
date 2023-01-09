@@ -10,7 +10,7 @@ import '../furniture_list_screen/furniture_list_model.dart';
 import '../furniture_list_screen/furniture_list_widget.dart';
 
 class ScreenFactory {
-  Widget ARScreen(int index) {
+  Widget ARScreen(String index) {
     return ChangeNotifierProvider(
       create: (_) => ARScreenModel(index),
       child: const ARScreenWidget(),
@@ -24,9 +24,9 @@ class ScreenFactory {
     );
   }
 
-  Widget FurniturePage(int index) {
+  Widget FurniturePage(String catName) {
     return ChangeNotifierProvider(
-      create: (_) => FurnitureListModel(index),
+      create: (_) => FurnitureListModel(catName),
       child: FurnitureListWidget(),
     );
   }

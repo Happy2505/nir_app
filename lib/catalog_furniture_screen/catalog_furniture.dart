@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nir_app/Models/Models_data.dart';
 import 'package:nir_app/Theme/app_color.dart';
 
+import '../Models/Category_data.dart';
 import '../factoryes/screen_factory.dart';
 import '../furniture_list_screen/furniture_list_widget.dart';
 
@@ -11,6 +12,7 @@ class CatalogFurniture extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _screenFactory = ScreenFactory();
+    final category = Category.category;
 
     return SafeArea(
         child: SingleChildScrollView(
@@ -42,12 +44,13 @@ class CatalogFurniture extends StatelessWidget {
                               childAspectRatio: 1.4,
                               crossAxisSpacing: 16,
                               mainAxisSpacing: 16),
-                      itemCount: 6,
+                      itemCount: category.length,
                       itemBuilder: (BuildContext context, index) {
+                        final catregoryy = category[index];
                         return InkWell(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(
-                                builder: (_) => _screenFactory.FurniturePage(index)),
+                                builder: (_) => _screenFactory.FurniturePage(catregoryy.catName)),
                             );
                           },
                           child: Container(
@@ -57,11 +60,11 @@ class CatalogFurniture extends StatelessWidget {
                             ),
                             child: Stack(
                               children: [
-                                const Positioned(
+                                Positioned(
                                     top: 8,
                                     left: 11,
                                     child: Text(
-                                      'Столы',
+                                      catregoryy.catName,
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: AppColors.mainDark,
@@ -71,7 +74,7 @@ class CatalogFurniture extends StatelessWidget {
                                     bottom: 3,
                                     right: 3,
                                     child: Image.asset(
-                                        'assets/catalog_img/стол.png')),
+                                        catregoryy.img, width: 100, height: 100,)),
                               ],
                             ),
                           ),

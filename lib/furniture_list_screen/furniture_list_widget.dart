@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:nir_app/Models/Models_data.dart';
 import 'package:nir_app/Theme/app_color.dart';
 import 'package:nir_app/factoryes/screen_factory.dart';
+import 'package:provider/provider.dart';
+
+import 'furniture_list_model.dart';
 
 class FurnitureListWidget extends StatelessWidget {
   FurnitureListWidget({Key? key}) : super(key: key);
@@ -9,10 +12,12 @@ class FurnitureListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final model = context.read<FurnitureListModel>();
+    final furniture = Models.models.where((m) => m.catName == model.indexx).toList();
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Столы',
+        title: Text(
+          model.indexx,
           style: TextStyle(color: AppColors.mainDark),
         ),
         leading: IconButton(
@@ -32,35 +37,22 @@ class FurnitureListWidget extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 19),
-                TextField(
-                    decoration: InputDecoration(
-                        isCollapsed: true,
-                        contentPadding: const EdgeInsets.all(10),
-                        labelText: 'Поиск...',
-                        suffixIcon: IconButton(
-                            icon: const Icon(Icons.search, color: Colors.black),
-                            onPressed: () {}),
-                        filled: true,
-                        fillColor: Colors.white.withAlpha(235),
-                        border: const OutlineInputBorder())),
-                const SizedBox(height: 35),
                 GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: Models.models.length,
+                    itemCount: 1,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 1,
-                            childAspectRatio: 2.4,
+                            childAspectRatio: 2.1,
                             mainAxisSpacing: 30),
                     itemBuilder: (BuildContext context, index) {
-                      final furniture = Models.models[index];
                       return Card(
                         elevation: 0,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Image.asset(furniture.img),
+                            Image.asset(furniture[index].img, width: 100, height: 100,),
                             const SizedBox(width: 22),
                             Expanded(
                               flex: 1,
@@ -70,7 +62,13 @@ class FurnitureListWidget extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                    Text(
-                                    furniture.description,
+                                     furniture[index].name,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                  Text(
+                                    furniture[index].description,
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(fontSize: 16),
@@ -82,7 +80,7 @@ class FurnitureListWidget extends StatelessWidget {
                                       ElevatedButton(
                                         onPressed: () {
                                           Navigator.push(context, MaterialPageRoute(
-                                              builder: (_) => _screenFactory.ARScreen(index)),
+                                              builder: (_) => _screenFactory.ARScreen(furniture[index].catName)),
                                           );
                                         },
                                         style: ButtonStyle(

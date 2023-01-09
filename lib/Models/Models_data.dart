@@ -6,14 +6,15 @@ class Models {
   final String description;
   final String img;
   final ARNode node;
+  final String catName;
 
-  Models({required this.name, required this.description, required this.img, required this.node});
+  Models({required this.name, required this.description, required this.img, required this.node, required this.catName});
 
   static var models = [
     Models(
         name: 'Стол',
         description:'Письменный стол Милан с ящиком 76.5х74.5 см ЛДСП цвет белый',
-        img:'assets/furniture_img/стол 1.png',
+        img:'assets/catalog_img/стол.png',
         node: ARNode(
             type: NodeType.fileSystemAppFolderGLTF2,
             uri:
@@ -21,11 +22,12 @@ class Models {
             scale: Vector3(1, 1, 1),
             position: Vector3(0.0, 0.0, 0.0),
             rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
+      catName: 'Столы'
     ),
     Models(
-      name: 'Стол',
+      name: 'Лампа',
       description:'лампа',
-      img:'assets/furniture_img/стол 1.png',
+      img:'assets/catalog_img/торшер.png',
       node: ARNode(
           type: NodeType.fileSystemAppFolderGLB,
           uri:
@@ -34,11 +36,13 @@ class Models {
           scale: Vector3(1, 1, 1),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
+        catName: 'Освещение'
+
     ),
     Models(
-      name: 'Стол',
+      name: 'Стул',
       description:'стул',
-      img:'assets/furniture_img/стол 1.png',
+      img:'assets/catalog_img/стул.png',
       node: ARNode(
           type: NodeType.fileSystemAppFolderGLB,
           uri:
@@ -47,11 +51,13 @@ class Models {
           scale: Vector3(1, 1, 1),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
+        catName: 'Стул'
+
     ),
     Models(
-      name: 'Стол',
+      name: 'Телевизор',
       description:'телевизор',
-      img:'assets/furniture_img/стол 1.png',
+      img:'assets/catalog_img/телевизор.png',
       node: ARNode(
           type: NodeType.fileSystemAppFolderGLB,
           uri:
@@ -60,9 +66,11 @@ class Models {
           scale: Vector3(1, 1, 1),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
+        catName: 'Телевизор'
+
     ),
     Models(
-      name: 'Стол',
+      name: 'Холодильник',
       description:'холодильник',
       img:'assets/furniture_img/стол 1.png',
       node: ARNode(
@@ -73,11 +81,13 @@ class Models {
           scale: Vector3(1, 1, 1),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
+        catName: 'Журнальный'
+
     ),
     Models(
-      name: 'Стол',
+      name: 'Комод',
       description:'комод',
-      img:'assets/furniture_img/стол 1.png',
+      img:'assets/catalog_img/комод.png',
       node: ARNode(
           type: NodeType.fileSystemAppFolderGLB,
           uri:
@@ -86,11 +96,13 @@ class Models {
           scale: Vector3(1, 1, 1),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
+        catName: 'Комод'
+
     ),
     Models(
-      name: 'Стол',
+      name: 'Кровать',
       description:'кровать',
-      img:'assets/furniture_img/стол 1.png',
+      img:'assets/catalog_img/кровать.png',
       node: ARNode(
           type: NodeType.fileSystemAppFolderGLB,
           uri:
@@ -99,7 +111,21 @@ class Models {
           scale: Vector3(1, 1, 1),
           position: Vector3(0.0, 0.0, 0.0),
           rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
+        catName: 'Кровать'
     ),
-
+    Models(
+        name: 'Шкаф',
+        description:'шкаф',
+        img:'assets/catalog_img/шкаф.png',
+        node: ARNode(
+            type: NodeType.fileSystemAppFolderGLB,
+            uri:
+            "models/shkav.glb",
+            // "Chicken_01/shkav.glb",
+            scale: Vector3(1, 1, 1),
+            position: Vector3(0.0, 0.0, 0.0),
+            rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
+        catName: 'Шкаф'
+    ),
   ];
 }

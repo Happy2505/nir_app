@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ARScreenModel extends ChangeNotifier{
-  ARScreenModel(int index){
+  ARScreenModel(String index){
     indexx = index;
+    // notifyListeners();
   }
-  int indexx = -1;
+  String indexx = ' ';
 }
