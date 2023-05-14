@@ -16,13 +16,28 @@ class Models {
         description:'Письменный стол Милан с ящиком 76.5х74.5 см ЛДСП цвет белый',
         img:'assets/catalog_img/стол.png',
         node: ARNode(
-            type: NodeType.fileSystemAppFolderGLTF2,
+            type: NodeType.fileSystemAppFolderGLB,
             uri:
-            "models/Stol.gltf",
+            "models/Стол.glb",
             scale: Vector3(1, 1, 1),
             position: Vector3(0.0, 0.0, 0.0),
             rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
       catName: 'Столы'
+    ),
+    Models(
+        name: 'Лампа2',
+        description:'лампа',
+        img:'assets/catalog_img/торшер.png',
+        node: ARNode(
+            type: NodeType.webGLB,
+            uri:
+            "https://github.com/Happy2505/Models/raw/main/%D0%9A%D0%BE%D0%BC%D0%BE%D0%B4.glb",
+            // "models/лампа.glb",
+            scale: Vector3(1, 1, 1),
+            position: Vector3(0.0, 0.0, 0.0),
+            rotation: Vector4(1.0, 0.0, 0.0, 0.0)),
+        catName: 'Освещение'
+
     ),
     Models(
       name: 'Лампа',

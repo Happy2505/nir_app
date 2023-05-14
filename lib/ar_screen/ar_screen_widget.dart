@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:ar_flutter_plugin/datatypes/node_types.dart';
 import 'package:ar_flutter_plugin/managers/ar_location_manager.dart';
 import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
 import 'package:ar_flutter_plugin/managers/ar_object_manager.dart';
@@ -193,23 +194,25 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
   Future<void> onPlaneOrPointTapped(
       List<ARHitTestResult> hitTestResults) async {
     final model = context.read<ARScreenModel>();
-    if (newIndex == ' ') {
-      final furniture = Models.models.where((m) => m.catName == model.indexx).toList();
-    }
-    final furniture = Models.models.where((m) => m.catName == newIndex).toList();
+    // if (newIndex == ' ') {
+    //   final furniture = Models.models.where((m) => m.catName == model.indexx).toList();
+    // }
+    // final furniture = Models.models.where((m) => m.catName == newIndex).toList();
     var singleHitTestResult = hitTestResults.firstWhere(
         (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
     if (singleHitTestResult != null) {
-      // decode();
       var newAnchor =
           ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
-      // newAnchor.transformation.setTranslationRaw(0, 0.0, -2.0);
-      // var ss = newAnchor.transformation.setRotationX(1.0);
+
       bool? didAddAnchor = await arAnchorManager.addAnchor(newAnchor);
       if (didAddAnchor!) {
         anchors.add(newAnchor);
-        var node = furniture[0];
-        var newNode = node.node;
+        var newNode = ARNode(
+            type: NodeType.webGLB,
+            uri: model.indexx,
+            scale: Vector3(1, 1, 1),
+            position: Vector3(0.0, 0.0, 0.0),
+            rotation: Vector4(1.0, 0.0, 0.0, 0.0));
         bool? didAddNodeToAnchor =
             await arObjectManager.addNode(newNode, planeAnchor: newAnchor);
         if (didAddNodeToAnchor!) {

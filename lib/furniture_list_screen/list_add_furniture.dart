@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:nir_app/Models/Models_data.dart';
 import 'package:nir_app/Theme/app_color.dart';
 import 'package:nir_app/ar_screen/ar_screen_model.dart';
+import 'package:provider/provider.dart';
 
 import '../Models/Category_data.dart';
+import 'furniture_list_model.dart';
 
 
 
@@ -19,6 +21,8 @@ class _AddFurnitureState extends State<AddFurniture> {
 
   @override
   Widget build(BuildContext context) {
+    final model = context.watch<FurnitureListModel>();
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,

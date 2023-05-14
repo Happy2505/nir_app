@@ -3,6 +3,7 @@ import 'package:nir_app/Models/Models_data.dart';
 import 'package:nir_app/Theme/app_color.dart';
 import 'package:nir_app/factoryes/screen_factory.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'furniture_list_model.dart';
 
@@ -12,13 +13,20 @@ class FurnitureListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.read<FurnitureListModel>();
-    final furniture = Models.models.where((m) => m.catName == model.indexx).toList();
+    final model = context.watch<FurnitureListModel>();
+    // model.loadFurniture();
+    if (model.furniture.isEmpty) {
+      return const Center(
+        child: CircularProgressIndicator(
+          color: Colors.grey,
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(
           model.indexx,
-          style: TextStyle(color: AppColors.mainDark),
+          style: const TextStyle(color: AppColors.mainDark),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: AppColors.mainDark),
@@ -47,12 +55,27 @@ class FurnitureListWidget extends StatelessWidget {
                             childAspectRatio: 2.1,
                             mainAxisSpacing: 30),
                     itemBuilder: (BuildContext context, index) {
+                      final f = model.furniture;
                       return Card(
                         elevation: 0,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Image.asset(furniture[index].img, width: 100, height: 100,),
+                            CachedNetworkImage(
+                              imageUrl: f[index].img,
+                              imageBuilder: (context, imageProvider) =>
+                                  Image.network(f[index].img,
+                                      width: 100, height: 100),
+                              placeholder: (context, url) => Image.asset(
+                                  'assets/pla.jpg',
+                                  width: 100,
+                                  height: 100),
+                              errorWidget: (context, url, error) => Image.asset(
+                                  'assets/pla.jpg',
+                                  width: 100,
+                                  height: 100),
+                            ),
+                            // Image.network(f[index].img, width: 100, height: 100),
                             const SizedBox(width: 22),
                             Expanded(
                               flex: 1,
@@ -61,14 +84,14 @@ class FurnitureListWidget extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                   Text(
-                                     furniture[index].name,
+                                  Text(
+                                    f[index].name,
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(fontSize: 16),
                                   ),
                                   Text(
-                                    furniture[index].description,
+                                    f[index].description,
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(fontSize: 16),
@@ -79,8 +102,12 @@ class FurnitureListWidget extends StatelessWidget {
                                     children: [
                                       ElevatedButton(
                                         onPressed: () {
-                                          Navigator.push(context, MaterialPageRoute(
-                                              builder: (_) => _screenFactory.ARScreen(furniture[index].catName)),
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    _screenFactory.ARScreen(
+                                                        f[index].modelUrl)),
                                           );
                                         },
                                         style: ButtonStyle(
