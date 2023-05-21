@@ -6,4 +6,5 @@ class ARScreenModel extends ChangeNotifier{
     // notifyListeners();
   }
   String indexx = ' ';
+  notifyListeners();
 }

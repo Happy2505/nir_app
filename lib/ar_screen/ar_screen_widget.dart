@@ -22,6 +22,8 @@ import 'package:provider/provider.dart';
 import '../entity/save.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
 
+import '../factoryes/screen_factory.dart';
+
 class ARScreenWidget extends StatefulWidget {
   const ARScreenWidget({Key? key}) : super(key: key);
 
@@ -33,6 +35,7 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
   late ARSessionManager arSessionManager;
   late ARObjectManager arObjectManager;
   late ARAnchorManager arAnchorManager;
+  final _screenFactory = ScreenFactory();
 
   List<ARNode> nodes = [];
   List<ARAnchor> anchors = [];
@@ -89,9 +92,10 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
   }
 
   Route _createRoute() {
+    // final _screenFactory = ScreenFactory();
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
-          const AddFurniture(),
+          _screenFactory.FurnitureAddPage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1);
         const end = Offset(0.0, 0.0);
@@ -110,6 +114,9 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
 
   Future<String> _navigateAndDisplaySelection(BuildContext context) async {
     newIndex = await Navigator.of(context).push(_createRoute());
+    // newIndex = await Navigator.push(context, MaterialPageRoute(
+    //     builder: (_) => _screenFactory.FurnitureAddPage()),
+    // );
     if (!mounted) return '';
     print(newIndex);
     return newIndex;
@@ -194,10 +201,11 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
   Future<void> onPlaneOrPointTapped(
       List<ARHitTestResult> hitTestResults) async {
     final model = context.read<ARScreenModel>();
-    // if (newIndex == ' ') {
-    //   final furniture = Models.models.where((m) => m.catName == model.indexx).toList();
-    // }
-    // final furniture = Models.models.where((m) => m.catName == newIndex).toList();
+    final furniture = newIndex;
+    if (newIndex == ' ') {
+      final furniture = model.indexx;
+    }
+
     var singleHitTestResult = hitTestResults.firstWhere(
         (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
     if (singleHitTestResult != null) {
@@ -209,7 +217,7 @@ class _ARScreenWidgetState extends State<ARScreenWidget> {
         anchors.add(newAnchor);
         var newNode = ARNode(
             type: NodeType.webGLB,
-            uri: model.indexx,
+            uri: furniture,
             scale: Vector3(1, 1, 1),
             position: Vector3(0.0, 0.0, 0.0),
             rotation: Vector4(1.0, 0.0, 0.0, 0.0));
