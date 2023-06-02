@@ -4,6 +4,7 @@ import 'package:nir_app/ar_screen/ar_screen_widget.dart';
 import 'package:nir_app/database/hive_names.dart';
 import 'package:nir_app/database/savePlan.dart';
 import 'package:nir_app/navigation/home_page.dart';
+import 'package:nir_app/profile_screen/proile_widget.dart';
 import 'package:nir_app/start_screen/start_screen_widget.dart';
 import 'package:nir_app/welcome_screen/welcome_screen_widget.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const StartScreenWidget(),
         '/welcome': (context) => WelcomeScreenWidget(),
         '/home': (context) => const HomePage(),
+        '/profile': (context) => ProfileWidget(),
         '/catalog': (context) => CatalogFurniture(),
         '/catalog/furnitureList': (context) => FurnitureListWidget(),
         '/catalog/furnitureList/arFurniture': (context) => ARScreenWidget(),

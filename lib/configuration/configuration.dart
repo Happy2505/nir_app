@@ -1,3 +1,3 @@
 class Configuration {
-  static const host = 'https://a17610-73ff.b.d-f.pw/';
+  static const host = 'https://a18149-a5ca.k.d-f.pw/';
 }
