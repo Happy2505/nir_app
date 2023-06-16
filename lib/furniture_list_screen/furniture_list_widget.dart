@@ -7,13 +7,27 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'furniture_list_model.dart';
 
-class FurnitureListWidget extends StatelessWidget {
+class FurnitureListWidget extends StatefulWidget {
   FurnitureListWidget({Key? key}) : super(key: key);
+
+  @override
+  State<FurnitureListWidget> createState() => _FurnitureListWidgetState();
+}
+
+class _FurnitureListWidgetState extends State<FurnitureListWidget> {
   final _screenFactory = ScreenFactory();
+  bool isFavorite = false; // Переменная для хранения состояния иконки
+
+  void toggleFavorite() {
+    setState(() {
+      isFavorite = !isFavorite; // Инвертируем состояние иконки
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final model = context.watch<FurnitureListModel>();
+
     // model.loadFurniture();
     if (model.furniture.isEmpty) {
       return const Center(
@@ -75,7 +89,6 @@ class FurnitureListWidget extends StatelessWidget {
                                   width: 100,
                                   height: 100),
                             ),
-                            // Image.network(f[index].img, width: 100, height: 100),
                             const SizedBox(width: 22),
                             Expanded(
                               flex: 1,
@@ -132,9 +145,11 @@ class FurnitureListWidget extends StatelessWidget {
                                         ),
                                       ),
                                       IconButton(
-                                        icon: const Icon(
-                                            Icons.bookmark_border_rounded),
-                                        onPressed: () {},
+                                        icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border,
+                                          color: Colors.red,),
+                                        onPressed: () {
+                                          toggleFavorite();
+                                        },
                                       ),
                                     ],
                                   ),

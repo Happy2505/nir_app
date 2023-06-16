@@ -53,7 +53,7 @@ class AuthViewModel extends ChangeNotifier {
     _errorMessage = await loginApp(login, password);
     if (_errorMessage == null) {
       Navigator.of(context)
-          .pushNamedAndRemoveUntil('example', (route) => false);
+          .pushNamedAndRemoveUntil('/home', (route) => false);
       // MainNavigation.resetNavigation(context);
     } else {
       _updateState(_errorMessage, false);

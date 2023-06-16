@@ -4,12 +4,16 @@ import 'package:nir_app/welcome_screen/third_welcome_screen_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../factoryes/screen_factory.dart';
+
 
 class SecondWelcomeScreenWidget extends StatelessWidget {
   const SecondWelcomeScreenWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _screenFactory = ScreenFactory();
+
     return Scaffold(
       body: Stack(
         children: [
@@ -83,14 +87,22 @@ class SecondWelcomeScreenWidget extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) =>
+                              _screenFactory.AuthPage()),
+                    );
                   },
                 ),
                 const SizedBox(width: 20),
                 ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (_) => const ThirdWelcomeScreenWidget()),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) =>
+                                _screenFactory.AuthPage()),
                       );
                     },
                     style: ButtonStyle(

@@ -4,6 +4,8 @@ import 'package:nir_app/welcome_screen/second_welcome_screen_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../factoryes/screen_factory.dart';
+
 class WelcomeScreenWidget extends StatefulWidget {
   const WelcomeScreenWidget({Key? key}) : super(key: key);
 
@@ -23,6 +25,8 @@ class _WelcomeScreenWidgetState extends State<WelcomeScreenWidget> {
     } else if (index == 1) {
       back = 'assets/image 2.png';
     }
+    final _screenFactory = ScreenFactory();
+
 
     return Scaffold(
       body: Stack(
@@ -132,7 +136,12 @@ class _WelcomeScreenWidgetState extends State<WelcomeScreenWidget> {
                         index = index + 1;
                       });
                       if (index == 2) {
-                        Navigator.pushReplacementNamed(context, '/home');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  _screenFactory.AuthPage()),
+                        );
                       }
                     },
                     style: ButtonStyle(

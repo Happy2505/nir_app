@@ -3,12 +3,16 @@ import 'package:nir_app/Theme/app_color.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../factoryes/screen_factory.dart';
+
 
 class ThirdWelcomeScreenWidget extends StatelessWidget {
   const ThirdWelcomeScreenWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _screenFactory = ScreenFactory();
+
     return Scaffold(
       body: Stack(
         children: [
@@ -82,7 +86,12 @@ class ThirdWelcomeScreenWidget extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) =>
+                              _screenFactory.AuthPage()),
+                    );
                   },
                 ),
                 const SizedBox(width: 20),

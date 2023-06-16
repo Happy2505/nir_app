@@ -1,4 +1,5 @@
 import 'dart:convert' as convert;
+import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
@@ -78,13 +79,15 @@ class NetworkClient {
     Map<String, dynamic>? urlParameters,
   ]) async {
     try {
+      var data = {'userName': 'max2505', 'password': 'max2505'};
+      var jsonData = jsonEncode(bodyParameters);
       final url = _makeUri(path, urlParameters);
       final request = await http.post(
         url,
-        headers: {'ContentType': "application/x-www-form-urlencoded"},
-        body: bodyParameters,
+        headers: {'Content-Type': "application/json"},
+        body: jsonData,
       );
-      final response = convert.jsonDecode(request.body) as Map<String, dynamic>;
+      final response = request.body;
       // _validateResponse(request, response);
       final result = parser(response);
       return result;

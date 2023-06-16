@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 
 import '../ar_screen/ar_screen_model.dart';
 import '../ar_screen/load_save_furniture_model.dart';
+import '../auth_widget/auth_model.dart';
+import '../auth_widget/auth_widget.dart';
 import '../furniture_list_screen/furniture_add_model.dart';
 import '../furniture_list_screen/furniture_list_model.dart';
 import '../furniture_list_screen/furniture_list_widget.dart';
@@ -37,6 +39,13 @@ class ScreenFactory {
     return ChangeNotifierProvider(
       create: (_) => FurnitureAddModel(),
       child: AddFurniture(),
+    );
+  }
+
+  Widget AuthPage() {
+    return ChangeNotifierProvider(
+      create: (_) => AuthViewModel(),
+      child: AuthWidget(),
     );
   }
 

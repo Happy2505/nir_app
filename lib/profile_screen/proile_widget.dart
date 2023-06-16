@@ -16,7 +16,9 @@ class ProfileWidget extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.input_rounded, color: AppColors.mainDark))
+            IconButton(onPressed: () {
+              Navigator.pushReplacementNamed(context, '/welcome');
+            }, icon: const Icon(Icons.input_rounded, color: AppColors.mainDark))
           ],
           title: const Text('Профиль',
               style: TextStyle(
@@ -42,14 +44,14 @@ class ProfileWidget extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
-                      Text("Цуканов Максим",
+                      Text("User",
                           style: TextStyle(
                               fontFamily: 'Jost',
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
                               letterSpacing: 0.15,
                               color: AppColors.mainDark)),
-                      Text('@maksimTsukanov',
+                      Text('@maksim25',
                           style: TextStyle(
                               fontFamily: 'Jost',
                               fontSize: 14,
@@ -107,28 +109,28 @@ class ProfileWidget extends StatelessWidget {
                             fontFamily: 'Jost',
                             letterSpacing: 0.15,
                             color: Color.fromARGB(255, 189, 189, 189))),
-                    Text("Цуканов Максим",
+                    Text("User",
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                             fontFamily: 'Jost',
                             letterSpacing: 0.25,
                             color: AppColors.mainDark)),
-                    SizedBox(height: 29),
-                    Text('Телефон',
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Jost',
-                            letterSpacing: 0.15,
-                            color: Color.fromARGB(255, 189, 189, 189))),
-                    Text("8 (888) 888 88-88",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Jost',
-                            letterSpacing: 0.25,
-                            color: AppColors.mainDark)),
+                    // SizedBox(height: 29),
+                    // Text('Телефон',
+                    //     style: TextStyle(
+                    //         fontSize: 12,
+                    //         fontWeight: FontWeight.w500,
+                    //         fontFamily: 'Jost',
+                    //         letterSpacing: 0.15,
+                    //         color: Color.fromARGB(255, 189, 189, 189))),
+                    // Text("8 (888) 888 88-88",
+                    //     style: TextStyle(
+                    //         fontSize: 16,
+                    //         fontWeight: FontWeight.w400,
+                    //         fontFamily: 'Jost',
+                    //         letterSpacing: 0.25,
+                    //         color: AppColors.mainDark)),
                     SizedBox(height: 29),
                     Text("E-mail",
                         style: TextStyle(
@@ -137,7 +139,7 @@ class ProfileWidget extends StatelessWidget {
                             fontFamily: 'Jost',
                             letterSpacing: 0.15,
                             color: Color.fromARGB(255, 189, 189, 189))),
-                    Text("user@example.com",
+                    Text("max@gmail.com",
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w400,

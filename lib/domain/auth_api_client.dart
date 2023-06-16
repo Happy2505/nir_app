@@ -57,13 +57,13 @@ class AuthApiClient {
     required String password,
   }) async {
     String parser(dynamic json) {
-      final jsonMap = json as Map<String, dynamic>;
-      final token = jsonMap['access_token'] as String;
+      final jsonMap = json as String;
+      final token = jsonMap;
       return token;
     }
 
     final parameters = <String, dynamic>{
-      'username': userName,
+      'userName': userName,
       'password': password,
     };
     final result = _networkClient.post(

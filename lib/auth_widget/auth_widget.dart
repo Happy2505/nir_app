@@ -99,14 +99,14 @@ class _RegField extends StatefulWidget {
 }
 
 class _RegFieldState extends State<_RegField> {
-  bool reg = true;
+  bool reg = false;
 
   Color color = Colors.grey;
   Color color2 = Color.fromARGB(255, 215, 215, 215);
   bool isChecked = false;
 
   TextEditingController emailController = TextEditingController();
-  TextEditingController CodController = TextEditingController();
+  TextEditingController passController = TextEditingController();
   String email = " ";
   String cod = "1234";
 
@@ -128,6 +128,7 @@ class _RegFieldState extends State<_RegField> {
     if (isChecked == true) {
       color2 = Colors.greenAccent;
     }
+    final model = context.read<AuthViewModel>();
     return Padding(
       padding: const EdgeInsets.only(top: 40),
       child: Column(
@@ -141,10 +142,12 @@ class _RegFieldState extends State<_RegField> {
             ),
           ),
           const SizedBox(height: 15),
+          const _ErrorMessageWidget(),
+          const SizedBox(height: 15),
           Padding(
             padding: const EdgeInsets.only(left: 45, right: 45),
             child: TextFormField(
-              controller: emailController,
+              controller: model.loginTextController,
               style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
@@ -174,7 +177,7 @@ class _RegFieldState extends State<_RegField> {
           Padding(
             padding: const EdgeInsets.only(left: 45, right: 45),
             child: TextFormField(
-              controller: emailController,
+              controller: model.passwordTextController,
               style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
@@ -207,10 +210,7 @@ class _RegFieldState extends State<_RegField> {
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => ProfileWidget()),
-                  );
+                  model.auth(context);
                 },
                 style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -436,6 +436,27 @@ class _RegFieldState extends State<_RegField> {
           ),
           SizedBox(height: 40),
         ],
+      ),
+    );
+  }
+}
+
+class _ErrorMessageWidget extends StatelessWidget {
+  const _ErrorMessageWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final errorMessage = context.select((AuthViewModel m) => m.errorMessage);
+    if (errorMessage == null) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Text(
+        errorMessage,
+        style: const TextStyle(
+          fontSize: 14,
+          color: Colors.red,
+        ),
       ),
     );
   }
