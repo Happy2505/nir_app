@@ -1,16 +1,9 @@
 # HomeSpaceAR
 
-A new Flutter project.
+Данное приложение было разработано в качестве дипломной работы для ВолГУ.
 
-## Getting Started
+## Функционал и возможности
 
-This project is a starting point for a Flutter application.
+HomeSpaceAR представляет из себя аналог приложения IKEA, которое позволяет из имеющегося каталога мебели расставлять её на поверхности с помощью технологии дополненной реальности.
+Приложение имеет серверную часть, что позволяет получать все модели мебели с интернета, тем самым уменьшая размер приложения. Так же благодаря серверу реальзована авторизиция и регистрация пользователья. Данный функционал был реализован с перспективой на будущее развите приложения и сотрудничество с мебельным магазином.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
